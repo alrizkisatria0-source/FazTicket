@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Info Gunung – FazTicket</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .mountain-tabs { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:2rem; }
+    .mountain-tab {
+      padding:8px 20px; border-radius:99px; border:2px solid var(--primary);
+      background:transparent; color:var(--primary); font-weight:600; font-size:0.9rem;
+      cursor:pointer; transition:all 0.3s;
+    }
+    .mountain-tab.active, .mountain-tab:hover { background:var(--primary); color:#fff; }
+    .mountain-panel { display:none; }
+    .mountain-panel.active { display:block; animation:fadeIn 0.4s ease; }
+    .elevation-bar {
+      height:12px; border-radius:99px; background:linear-gradient(90deg,var(--primary-light),var(--primary));
+      transition:width 1s ease;
+    }
+  </style>
+</head>
+<body>
+<div id="loading-screen"><div class="loader-logo">⛰ FazTicket</div><div class="loader-bar"><div class="loader-fill"></div></div></div>
+<button id="scrollTop"><i class="fa fa-chevron-up"></i></button>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><span class="brand-icon">⛰</span> FazTicket</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link active" href="info-gunung.html">Info Gunung</a></li>
+        <li class="nav-item"><a class="nav-link" href="jalur.html">Jalur Pendakian</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link" href="data-pendaki.html">Data Pendaki</a></li>
+        <li class="nav-item"><a class="nav-link" href="sewa-alat.html">Sewa Alat</a></li>
+        <li class="nav-item"><a class="nav-link" href="statistik.html">Statistik</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+      </ul>
+      <button id="darkModeToggle">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-badge" style="margin-bottom:1rem">ℹ️ Info Gunung</div>
+    <h1>Informasi Gunung Mojokerto</h1>
+    <p>Deskripsi lengkap, ketinggian, lokasi, dan kondisi cuaca terkini</p>
+  </div>
+</section>
+
+<section class="py-section">
+  <div class="container">
+
+    <!-- Mountain selector tabs -->
+    <div class="mountain-tabs animate-on-scroll">
+      <button class="mountain-tab active" onclick="showMountain('penanggungan')">Penanggungan</button>
+      <button class="mountain-tab" onclick="showMountain('welirang')">Welirang</button>
+      <button class="mountain-tab" onclick="showMountain('arjuno')">Arjuno</button>
+      <button class="mountain-tab" onclick="showMountain('bekel')">Bekel</button>
+      <button class="mountain-tab" onclick="showMountain('pundak')">Pundak</button>
+    </div>
+
+    <!-- Penanggungan -->
+    <div class="mountain-panel active" id="panel-penanggungan">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="info-card animate-on-scroll">
+            <div class="info-card-img">
+              <img src="https://superlive.id/storage/superadventure/2018/10/23/94f23752c7f7.jpg" alt="Penanggungan"/>
+            </div>
+            <div class="info-card-body">
+              <span class="info-tag">🏔 Gunung Suci</span>
+              <h3>Gunung Penanggungan</h3>
+              <p style="color:var(--text-light);font-size:0.95rem;margin-bottom:1.5rem">
+                Gunung Penanggungan (juga disebut Pawitra) adalah gunung berapi yang tidak aktif di perbatasan Kabupaten Mojokerto dan Pasuruan, Jawa Timur. Dikenal sebagai "Gunung Suci" karena terdapat ratusan peninggalan arkeologi Hindu-Buddha dari abad ke-10 hingga ke-15 Masehi yang tersebar di lereng-lerengnya.
+              </p>
+              <ul class="info-list">
+                <li><span>Ketinggian</span><strong>1.653 mdpl</strong></li>
+                <li><span>Lokasi</span><strong>Mojokerto – Pasuruan, Jawa Timur</strong></li>
+                <li><span>Tipe Gunung</span><strong>Stratovolcano (Tidak Aktif)</strong></li>
+                <li><span>Koordinat</span><strong>7°37'S 112°37'E</strong></li>
+                <li><span>Tingkat Kesulitan</span><strong>Sedang</strong></li>
+                <li><span>Jalur Tersedia</span><strong>3 Jalur</strong></li>
+                <li><span>Harga Tiket</span><strong>Rp 25.000/orang</strong></li>
+                <li><span>Buka Pendakian</span><strong>Setiap Hari (05.00–18.00)</strong></li>
+              </ul>
+              <div class="mt-3">
+                <strong style="font-size:0.85rem;color:var(--text-light);text-transform:uppercase;letter-spacing:1px">Perbandingan Ketinggian</strong>
+                <div style="margin-top:0.8rem">
+                  <div class="d-flex justify-content-between mb-1"><small>Penanggungan</small><small>1.653 mdpl</small></div>
+                  <div style="background:rgba(0,119,182,0.1);border-radius:99px;height:12px">
+                    <div class="elevation-bar" style="width:50%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <!-- Weather Card -->
+          <div class="weather-card animate-on-scroll" data-weather-mountain="Penanggungan">
+            <div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:2px;opacity:0.7;margin-bottom:0.5rem">Cuaca Saat Ini</div>
+            <div style="font-size:1rem;font-weight:600;margin-bottom:1rem">Puncak Penanggungan</div>
+            <div class="weather-icon">⛅</div>
+            <div class="weather-temp">18°C</div>
+            <div class="weather-desc">Partly Cloudy</div>
+            <div class="weather-detail">
+              <div class="weather-detail-item"><strong>75%</strong>Kelembaban</div>
+              <div class="weather-detail-item"><strong>12 km/h</strong>Angin</div>
+              <div class="weather-detail-item"><strong>8 km</strong>Visibilitas</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:1rem;margin-top:1.5rem;font-size:0.8rem;opacity:0.8">
+              ⚠️ Kondisi cuaca cukup baik untuk pendakian. Tetap waspadai angin di puncak.
+            </div>
+          </div>
+
+          <!-- Best Time -->
+          <div style="background:var(--card-bg);border-radius:16px;padding:1.5rem;box-shadow:var(--shadow);margin-top:1rem" class="animate-on-scroll">
+            <h5 style="color:var(--primary-dark);margin-bottom:1rem">📅 Waktu Terbaik Mendaki</h5>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem">
+              <div style="background:var(--sky);border-radius:10px;padding:8px;text-align:center">
+                <div>✅ Apr – Sep</div><small style="color:var(--text-light)">Musim Kemarau</small>
+              </div>
+              <div style="background:#fee2e2;border-radius:10px;padding:8px;text-align:center">
+                <div>⚠️ Okt – Mar</div><small style="color:#991b1b">Musim Hujan</small>
+              </div>
+            </div>
+            <a href="booking.html" class="btn-primary-custom w-100 justify-content-center mt-3" style="font-size:0.9rem">
+              <i class="fa fa-ticket-alt"></i> Pesan Tiket
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Welirang -->
+    <div class="mountain-panel" id="panel-welirang">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="info-card animate-on-scroll">
+            <div class="info-card-img">
+              <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Welirang"/>
+            </div>
+            <div class="info-card-body">
+              <span class="info-tag">🌋 Gunung Api Aktif</span>
+              <h3>Gunung Welirang</h3>
+              <p style="color:var(--text-light);font-size:0.95rem;margin-bottom:1.5rem">
+                Gunung Welirang adalah gunung berapi aktif yang terletak di perbatasan Kabupaten Mojokerto dan Pasuruan. Sering didaki bersama Gunung Arjuno dalam satu trek. Terkenal dengan kawah belerang aktif dan puncaknya yang menakjubkan. Terdapat penambang belerang yang membawa hasil tambang turun ke kaki gunung.
+              </p>
+              <ul class="info-list">
+                <li><span>Ketinggian</span><strong>3.156 mdpl</strong></li>
+                <li><span>Lokasi</span><strong>Mojokerto – Pasuruan, Jawa Timur</strong></li>
+                <li><span>Tipe Gunung</span><strong>Stratovolcano (Aktif)</strong></li>
+                <li><span>Status Vulkanik</span><strong>Level I – Normal</strong></li>
+                <li><span>Tingkat Kesulitan</span><strong>Sulit</strong></li>
+                <li><span>Jalur Tersedia</span><strong>2 Jalur</strong></li>
+                <li><span>Harga Tiket</span><strong>Rp 35.000/orang</strong></li>
+                <li><span>Buka Pendakian</span><strong>Setiap Hari (04.00–16.00)</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="weather-card animate-on-scroll">
+            <div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:2px;opacity:0.7;margin-bottom:0.5rem">Cuaca Saat Ini</div>
+            <div style="font-size:1rem;font-weight:600;margin-bottom:1rem">Puncak Welirang</div>
+            <div class="weather-icon">🌫️</div>
+            <div class="weather-temp">14°C</div>
+            <div class="weather-desc">Foggy / Berkabut</div>
+            <div class="weather-detail">
+              <div class="weather-detail-item"><strong>88%</strong>Kelembaban</div>
+              <div class="weather-detail-item"><strong>8 km/h</strong>Angin</div>
+              <div class="weather-detail-item"><strong>3 km</strong>Visibilitas</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:1rem;margin-top:1.5rem;font-size:0.8rem;opacity:0.8">
+              ⚠️ Visibilitas rendah hari ini. Gunakan masker karena gas belerang. Hati-hati!
+            </div>
+          </div>
+          <div style="background:var(--card-bg);border-radius:16px;padding:1.5rem;box-shadow:var(--shadow);margin-top:1rem" class="animate-on-scroll">
+            <h5 style="color:var(--primary-dark);margin-bottom:1rem">📅 Waktu Terbaik Mendaki</h5>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem">
+              <div style="background:var(--sky);border-radius:10px;padding:8px;text-align:center"><div>✅ Jun – Agu</div><small style="color:var(--text-light)">Puncak Kemarau</small></div>
+              <div style="background:#fee2e2;border-radius:10px;padding:8px;text-align:center"><div>⚠️ Nov – Feb</div><small style="color:#991b1b">Musim Hujan</small></div>
+            </div>
+            <a href="booking.html" class="btn-primary-custom w-100 justify-content-center mt-3" style="font-size:0.9rem"><i class="fa fa-ticket-alt"></i> Pesan Tiket</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arjuno -->
+    <div class="mountain-panel" id="panel-arjuno">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="info-card animate-on-scroll">
+            <div class="info-card-img">
+              <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Arjuno"/>
+            </div>
+            <div class="info-card-body">
+              <span class="info-tag">👑 Puncak Tertinggi</span>
+              <h3>Gunung Arjuno</h3>
+              <p style="color:var(--text-light);font-size:0.95rem;margin-bottom:1.5rem">
+                Gunung Arjuno adalah gunung berapi stratovolcano yang tidak aktif di Jawa Timur. Puncaknya bernama Ogal-Agil dengan ketinggian 3.339 mdpl, merupakan puncak tertinggi di Jawa Timur bagian timur. Sering didaki bersama Welirang. Terdapat padang savana (lembah Lali Jiwo) yang sangat indah.
+              </p>
+              <ul class="info-list">
+                <li><span>Ketinggian</span><strong>3.339 mdpl</strong></li>
+                <li><span>Lokasi</span><strong>Mojokerto – Malang – Pasuruan</strong></li>
+                <li><span>Tipe Gunung</span><strong>Stratovolcano (Tidak Aktif)</strong></li>
+                <li><span>Fitur Unik</span><strong>Lembah Lali Jiwo, Padang Savana</strong></li>
+                <li><span>Tingkat Kesulitan</span><strong>Sangat Sulit</strong></li>
+                <li><span>Jalur Tersedia</span><strong>3 Jalur</strong></li>
+                <li><span>Harga Tiket</span><strong>Rp 40.000/orang</strong></li>
+                <li><span>Buka Pendakian</span><strong>Setiap Hari (04.00–14.00)</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="weather-card animate-on-scroll">
+            <div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:2px;opacity:0.7;margin-bottom:0.5rem">Cuaca Saat Ini</div>
+            <div style="font-size:1rem;font-weight:600;margin-bottom:1rem">Puncak Arjuno</div>
+            <div class="weather-icon">🌧️</div>
+            <div class="weather-temp">12°C</div>
+            <div class="weather-desc">Light Rain / Gerimis</div>
+            <div class="weather-detail">
+              <div class="weather-detail-item"><strong>92%</strong>Kelembaban</div>
+              <div class="weather-detail-item"><strong>15 km/h</strong>Angin</div>
+              <div class="weather-detail-item"><strong>5 km</strong>Visibilitas</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:1rem;margin-top:1.5rem;font-size:0.8rem;opacity:0.8">
+              🚨 Cuaca kurang kondusif. Tunda pendakian jika tidak terlatih di kondisi hujan.
+            </div>
+          </div>
+          <div style="background:var(--card-bg);border-radius:16px;padding:1.5rem;box-shadow:var(--shadow);margin-top:1rem" class="animate-on-scroll">
+            <h5 style="color:var(--primary-dark);margin-bottom:1rem">📅 Waktu Terbaik Mendaki</h5>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem">
+              <div style="background:var(--sky);border-radius:10px;padding:8px;text-align:center"><div>✅ Jul – Sep</div><small style="color:var(--text-light)">Musim Kemarau</small></div>
+              <div style="background:#fee2e2;border-radius:10px;padding:8px;text-align:center"><div>❌ Des – Mar</div><small style="color:#991b1b">Hindari Musim Hujan</small></div>
+            </div>
+            <a href="booking.html" class="btn-primary-custom w-100 justify-content-center mt-3" style="font-size:0.9rem"><i class="fa fa-ticket-alt"></i> Pesan Tiket</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bekel -->
+    <div class="mountain-panel" id="panel-bekel">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="info-card animate-on-scroll">
+            <div class="info-card-img">
+              <img src="https://1.bp.blogspot.com/-6kHIjLW-Mco/YD23fWHy8AI/AAAAAAAACZQ/IkRTzJZjLT4JwglY6dtjjUx52Jcvzb77wCLcBGAsYHQ/s2048/P_20200803_161002.jpg" alt="Bekel"/>
+            </div>
+            <div class="info-card-body">
+              <span class="info-tag">🌟 Ramah Pemula</span>
+              <h3>Gunung Bekel</h3>
+              <p style="color:var(--text-light);font-size:0.95rem;margin-bottom:1.5rem">
+                Gunung Bekel merupakan gunung yang ideal untuk pendaki pemula di Mojokerto. Jalurnya relatif pendek dan tidak terlalu curam. Dari puncaknya, pendaki dapat menikmati panorama Gunung Penanggungan, Welirang, dan Selat Madura yang memukau. Sering dijadikan pilihan untuk wisata alam bagi keluarga.
+              </p>
+              <ul class="info-list">
+                <li><span>Ketinggian</span><strong>1.281 mdpl</strong></li>
+                <li><span>Lokasi</span><strong>Trawas, Mojokerto</strong></li>
+                <li><span>Tipe Gunung</span><strong>Perbukitan (Non-Vulkanik)</strong></li>
+                <li><span>Cocok Untuk</span><strong>Pemula & Keluarga</strong></li>
+                <li><span>Tingkat Kesulitan</span><strong>Mudah</strong></li>
+                <li><span>Jalur Tersedia</span><strong>2 Jalur</strong></li>
+                <li><span>Harga Tiket</span><strong>Rp 20.000/orang</strong></li>
+                <li><span>Buka Pendakian</span><strong>Setiap Hari (06.00–18.00)</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="weather-card animate-on-scroll">
+            <div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:2px;opacity:0.7;margin-bottom:0.5rem">Cuaca Saat Ini</div>
+            <div style="font-size:1rem;font-weight:600;margin-bottom:1rem">Puncak Bekel</div>
+            <div class="weather-icon">☀️</div>
+            <div class="weather-temp">20°C</div>
+            <div class="weather-desc">Sunny / Cerah Berseri</div>
+            <div class="weather-detail">
+              <div class="weather-detail-item"><strong>65%</strong>Kelembaban</div>
+              <div class="weather-detail-item"><strong>10 km/h</strong>Angin</div>
+              <div class="weather-detail-item"><strong>12 km</strong>Visibilitas</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:1rem;margin-top:1.5rem;font-size:0.8rem;opacity:0.8">
+              ✅ Kondisi cuaca sangat baik! Hari yang sempurna untuk mendaki Bekel.
+            </div>
+          </div>
+          <div style="background:var(--card-bg);border-radius:16px;padding:1.5rem;box-shadow:var(--shadow);margin-top:1rem" class="animate-on-scroll">
+            <h5 style="color:var(--primary-dark);margin-bottom:1rem">📅 Waktu Terbaik Mendaki</h5>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem">
+              <div style="background:var(--sky);border-radius:10px;padding:8px;text-align:center"><div>✅ Sepanjang Tahun</div><small style="color:var(--text-light)">Cocok Kapan Saja</small></div>
+              <div style="background:#fef3c7;border-radius:10px;padding:8px;text-align:center"><div>⚠️ Jan – Mar</div><small style="color:#92400e">Lebih Berhati-hati</small></div>
+            </div>
+            <a href="booking.html" class="btn-primary-custom w-100 justify-content-center mt-3" style="font-size:0.9rem"><i class="fa fa-ticket-alt"></i> Pesan Tiket</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pundak -->
+    <div class="mountain-panel" id="panel-pundak">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="info-card animate-on-scroll">
+            <div class="info-card-img">
+              <img src="https://tse4.mm.bing.net/th/id/OIP.5xb6H6NHczVBfHHJVqIb_gHaJ4?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Pundak"/>
+            </div>
+            <div class="info-card-body">
+              <span class="info-tag">🌿 Wisata Alam</span>
+              <h3>Gunung Pundak</h3>
+              <p style="color:var(--text-light);font-size:0.95rem;margin-bottom:1.5rem">
+                Gunung Pundak terletak di kawasan Pacet, Mojokerto. Gunung ini populer sebagai destinasi wisata alam dengan udara segar dan pemandangan perkebunan teh. Jalur pendakiannya relatif menyenangkan dengan berbagai titik istirahat strategis. Cocok untuk pendaki yang ingin menikmati alam tanpa medan yang terlalu berat.
+              </p>
+              <ul class="info-list">
+                <li><span>Ketinggian</span><strong>1.585 mdpl</strong></li>
+                <li><span>Lokasi</span><strong>Pacet, Mojokerto</strong></li>
+                <li><span>Tipe Gunung</span><strong>Perbukitan Vulkanik</strong></li>
+                <li><span>Daya Tarik</span><strong>Perkebunan Teh, Air Terjun</strong></li>
+                <li><span>Tingkat Kesulitan</span><strong>Sedang</strong></li>
+                <li><span>Jalur Tersedia</span><strong>2 Jalur</strong></li>
+                <li><span>Harga Tiket</span><strong>Rp 25.000/orang</strong></li>
+                <li><span>Buka Pendakian</span><strong>Setiap Hari (05.00–17.00)</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="weather-card animate-on-scroll">
+            <div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:2px;opacity:0.7;margin-bottom:0.5rem">Cuaca Saat Ini</div>
+            <div style="font-size:1rem;font-weight:600;margin-bottom:1rem">Puncak Pundak</div>
+            <div class="weather-icon">🌤</div>
+            <div class="weather-temp">17°C</div>
+            <div class="weather-desc">Mostly Clear / Cerah</div>
+            <div class="weather-detail">
+              <div class="weather-detail-item"><strong>70%</strong>Kelembaban</div>
+              <div class="weather-detail-item"><strong>9 km/h</strong>Angin</div>
+              <div class="weather-detail-item"><strong>10 km</strong>Visibilitas</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:1rem;margin-top:1.5rem;font-size:0.8rem;opacity:0.8">
+              ✅ Kondisi cuaca baik. Waktu yang tepat untuk menikmati perkebunan teh!
+            </div>
+          </div>
+          <div style="background:var(--card-bg);border-radius:16px;padding:1.5rem;box-shadow:var(--shadow);margin-top:1rem" class="animate-on-scroll">
+            <h5 style="color:var(--primary-dark);margin-bottom:1rem">📅 Waktu Terbaik Mendaki</h5>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.85rem">
+              <div style="background:var(--sky);border-radius:10px;padding:8px;text-align:center"><div>✅ Mei – Okt</div><small style="color:var(--text-light)">Musim Kemarau</small></div>
+              <div style="background:#fef3c7;border-radius:10px;padding:8px;text-align:center"><div>⚠️ Nov – Apr</div><small style="color:#92400e">Waspadai Hujan</small></div>
+            </div>
+            <a href="booking.html" class="btn-primary-custom w-100 justify-content-center mt-3" style="font-size:0.9rem"><i class="fa fa-ticket-alt"></i> Pesan Tiket</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Compare Table -->
+    <div class="mt-5 animate-on-scroll">
+      <h3 class="section-title mb-4">Perbandingan Semua Gunung</h3>
+      <div class="table-custom" style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Gunung</th>
+              <th>Ketinggian</th>
+              <th>Kesulitan</th>
+              <th>Tiket</th>
+              <th>Jalur</th>
+              <th>Waktu Estimasi</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Penanggungan</strong></td><td>1.653 mdpl</td><td><span class="difficulty-badge diff-medium">Sedang</span></td><td>Rp 25.000</td><td>3 jalur</td><td>6–8 jam</td><td><a href="booking.html" class="btn-primary-custom" style="padding:6px 16px;font-size:0.82rem">Pesan</a></td></tr>
+            <tr><td><strong>Welirang</strong></td><td>3.156 mdpl</td><td><span class="difficulty-badge diff-hard">Sulit</span></td><td>Rp 35.000</td><td>2 jalur</td><td>10–14 jam</td><td><a href="booking.html" class="btn-primary-custom" style="padding:6px 16px;font-size:0.82rem">Pesan</a></td></tr>
+            <tr><td><strong>Arjuno</strong></td><td>3.339 mdpl</td><td><span class="difficulty-badge diff-extreme">Sangat Sulit</span></td><td>Rp 40.000</td><td>3 jalur</td><td>16–20 jam</td><td><a href="booking.html" class="btn-primary-custom" style="padding:6px 16px;font-size:0.82rem">Pesan</a></td></tr>
+            <tr><td><strong>Bekel</strong></td><td>1.281 mdpl</td><td><span class="difficulty-badge diff-easy">Mudah</span></td><td>Rp 20.000</td><td>2 jalur</td><td>3–4 jam</td><td><a href="booking.html" class="btn-primary-custom" style="padding:6px 16px;font-size:0.82rem">Pesan</a></td></tr>
+            <tr><td><strong>Pundak</strong></td><td>1.585 mdpl</td><td><span class="difficulty-badge diff-medium">Sedang</span></td><td>Rp 25.000</td><td>2 jalur</td><td>5–7 jam</td><td><a href="booking.html" class="btn-primary-custom" style="padding:6px 16px;font-size:0.82rem">Pesan</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4"><div class="footer-brand">⛰ FazTicket</div><p class="footer-tagline">Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto.</p></div>
+      <div class="col-6 col-lg-4"><h5>Navigasi</h5><ul class="footer-links"><li><a href="index.html">Beranda</a></li><li><a href="jalur.html">Jalur Pendakian</a></li><li><a href="booking.html">Booking</a></li><li><a href="contact.html">Kontak</a></li></ul></div>
+      <div class="col-6 col-lg-4"><h5>Kontak</h5><ul class="footer-links"><li><a href="https://wa.me/6285751787232" target="_blank">+62 857-5178-7232</a></li><li><a href="mailto:fazticket@gmail.com">fazticket@gmail.com</a></li></ul></div>
+    </div>
+    <hr class="footer-divider"/>
+    <p class="footer-bottom">© 2026 FazTicket. Dibuat untuk para pendaki Mojokerto.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+<script>
+  function showMountain(id) {
+    document.querySelectorAll('.mountain-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.mountain-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({ top: 300, behavior: 'smooth' });
+  }
+
+  // Simulate weather refresh
+  setInterval(() => {
+    const icons = ['☀️','⛅','🌤','🌥','🌦','🌧','🌫️'];
+    // subtle random fluctuation (visual only)
+  }, 30000);
+</script>
+</body>
+</html>

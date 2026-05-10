@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jalur Pendakian – FazTicket</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div id="loading-screen"><div class="loader-logo">⛰ FazTicket</div><div class="loader-bar"><div class="loader-fill"></div></div></div>
+<button id="scrollTop"><i class="fa fa-chevron-up"></i></button>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><span class="brand-icon">⛰</span> FazTicket</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="info-gunung.html">Info Gunung</a></li>
+        <li class="nav-item"><a class="nav-link active" href="jalur.html">Jalur Pendakian</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link" href="data-pendaki.html">Data Pendaki</a></li>
+        <li class="nav-item"><a class="nav-link" href="sewa-alat.html">Sewa Alat</a></li>
+        <li class="nav-item"><a class="nav-link" href="statistik.html">Statistik</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+      </ul>
+      <button id="darkModeToggle">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-badge" style="margin-bottom:1rem">🗺 Jalur Pendakian</div>
+    <h1>Rute Pendakian Mojokerto</h1>
+    <p>Temukan jalur pendakian yang sesuai dengan kemampuan dan pengalamanmu</p>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<section style="background:var(--card-bg);border-bottom:1px solid rgba(0,119,182,0.1);padding:1.5rem 0;position:sticky;top:66px;z-index:100">
+  <div class="container">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-4">
+        <select class="form-select" id="filterMountain" onchange="filterRoutes()">
+          <option value="">Semua Gunung</option>
+          <option value="Penanggungan">Penanggungan</option>
+          <option value="Welirang">Welirang</option>
+          <option value="Arjuno">Arjuno</option>
+          <option value="Bekel">Bekel</option>
+          <option value="Pundak">Pundak</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" id="filterDifficulty" onchange="filterRoutes()">
+          <option value="">Semua Tingkat Kesulitan</option>
+          <option value="Mudah">Mudah</option>
+          <option value="Sedang">Sedang</option>
+          <option value="Sulit">Sulit</option>
+          <option value="Sangat Sulit">Sangat Sulit</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <div style="color:var(--text-light);font-size:0.9rem">
+          Menampilkan <strong id="routeCount" style="color:var(--primary)">8</strong> jalur pendakian
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROUTES GRID -->
+<section class="py-section">
+  <div class="container">
+    <div class="row g-4" id="routesGrid">
+
+      <!-- Route 1 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Penanggungan" data-difficulty="Sedang">
+        <div class="route-card">
+          <img src="https://superlive.id/storage/superadventure/2018/10/23/94f23752c7f7.jpg" alt="Via Tamiajeng" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Tamiajeng – Penanggungan</h3>
+              <span class="difficulty-badge diff-medium ms-2">Sedang</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur paling populer menuju puncak Penanggungan. Melewati banyak situs purbakala dan pemandangan indah ke arah selatan.</p>
+            <div class="route-meta">
+              <div class="route-meta-item">
+                <div class="label">Jarak</div>
+                <div class="value">8.4 km</div>
+              </div>
+              <div class="route-meta-item">
+                <div class="label">Estimasi</div>
+                <div class="value">6–8 jam</div>
+              </div>
+              <div class="route-meta-item">
+                <div class="label">Ketinggian</div>
+                <div class="value">1.653 mdpl</div>
+              </div>
+              <div class="route-meta-item">
+                <div class="label">Start</div>
+                <div class="value">350 mdpl</div>
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px">
+                <i class="fa fa-ticket-alt"></i> Pesan
+              </a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer" onclick="showDetail('Tamiajeng')">
+                <i class="fa fa-info-circle"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route 2 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Penanggungan" data-difficulty="Mudah">
+        <div class="route-card">
+          <img src="https://superlive.id/storage/superadventure/2018/10/23/94f23752c7f7.jpg" alt="Via Jolotundo" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Jolotundo – Penanggungan</h3>
+              <span class="difficulty-badge diff-easy ms-2">Mudah</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur via situs Jolotundo dengan pemandian bersejarah. Cocok untuk pendaki pemula dan wisata budaya.</p>
+            <div class="route-meta">
+              <div class="route-meta-item"><div class="label">Jarak</div><div class="value">6.2 km</div></div>
+              <div class="route-meta-item"><div class="label">Estimasi</div><div class="value">4–6 jam</div></div>
+              <div class="route-meta-item"><div class="label">Ketinggian</div><div class="value">1.653 mdpl</div></div>
+              <div class="route-meta-item"><div class="label">Start</div><div class="value">420 mdpl</div></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px"><i class="fa fa-ticket-alt"></i> Pesan</a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer"><i class="fa fa-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route 3 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Welirang" data-difficulty="Sulit">
+        <div class="route-card">
+          <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Via Tretes" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Tretes – Welirang</h3>
+              <span class="difficulty-badge diff-hard ms-2">Sulit</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur klasik menuju kawah Welirang. Melewati hutan tropis lebat dan area penambangan belerang aktif.</p>
+            <div class="route-meta">
+              <div class="route-meta-item"><div class="label">Jarak</div><div class="value">14.8 km</div></div>
+              <div class="route-meta-item"><div class="label">Estimasi</div><div class="value">10–14 jam</div></div>
+              <div class="route-meta-item"><div class="label">Ketinggian</div><div class="value">3.156 mdpl</div></div>
+              <div class="route-meta-item"><div class="label">Start</div><div class="value">680 mdpl</div></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px"><i class="fa fa-ticket-alt"></i> Pesan</a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer"><i class="fa fa-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route 4 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Arjuno" data-difficulty="Sangat Sulit">
+        <div class="route-card">
+          <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Via Lawang" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Lawang – Arjuno</h3>
+              <span class="difficulty-badge diff-extreme ms-2">Sangat Sulit</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur terpanjang menuju puncak Ogal-Agil Arjuno. Melewati Padang Savana dan hutan cemara yang menakjubkan.</p>
+            <div class="route-meta">
+              <div class="route-meta-item"><div class="label">Jarak</div><div class="value">22.6 km</div></div>
+              <div class="route-meta-item"><div class="label">Estimasi</div><div class="value">16–20 jam</div></div>
+              <div class="route-meta-item"><div class="label">Ketinggian</div><div class="value">3.339 mdpl</div></div>
+              <div class="route-meta-item"><div class="label">Start</div><div class="value">800 mdpl</div></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px"><i class="fa fa-ticket-alt"></i> Pesan</a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer"><i class="fa fa-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route 5 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Bekel" data-difficulty="Mudah">
+        <div class="route-card">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Via Claket" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Claket – Bekel</h3>
+              <span class="difficulty-badge diff-easy ms-2">Mudah</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur pendek dan ramah pemula menuju puncak Bekel. Pemandangan Selat Madura dari puncak sangat memukau.</p>
+            <div class="route-meta">
+              <div class="route-meta-item"><div class="label">Jarak</div><div class="value">4.5 km</div></div>
+              <div class="route-meta-item"><div class="label">Estimasi</div><div class="value">3–4 jam</div></div>
+              <div class="route-meta-item"><div class="label">Ketinggian</div><div class="value">1.281 mdpl</div></div>
+              <div class="route-meta-item"><div class="label">Start</div><div class="value">650 mdpl</div></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px"><i class="fa fa-ticket-alt"></i> Pesan</a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer"><i class="fa fa-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route 6 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Pundak" data-difficulty="Sedang">
+        <div class="route-card">
+          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80" alt="Via Pacet" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Pacet – Pundak</h3>
+              <span class="difficulty-badge diff-medium ms-2">Sedang</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur melalui kawasan wisata Pacet dengan udara segar dan pemandangan perkebunan yang indah.</p>
+            <div class="route-meta">
+              <div class="route-meta-item"><div class="label">Jarak</div><div class="value">7.8 km</div></div>
+              <div class="route-meta-item"><div class="label">Estimasi</div><div class="value">5–7 jam</div></div>
+              <div class="route-meta-item"><div class="label">Ketinggian</div><div class="value">1.585 mdpl</div></div>
+              <div class="route-meta-item"><div class="label">Start</div><div class="value">500 mdpl</div></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px"><i class="fa fa-ticket-alt"></i> Pesan</a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer"><i class="fa fa-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route 7 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Welirang" data-difficulty="Sulit">
+        <div class="route-card">
+          <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Via Cangar" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Cangar – Welirang</h3>
+              <span class="difficulty-badge diff-hard ms-2">Sulit</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur alternatif dari arah Batu/Malang. Lebih bervariasi dan melewati sumber air panas Cangar.</p>
+            <div class="route-meta">
+              <div class="route-meta-item"><div class="label">Jarak</div><div class="value">12.4 km</div></div>
+              <div class="route-meta-item"><div class="label">Estimasi</div><div class="value">9–12 jam</div></div>
+              <div class="route-meta-item"><div class="label">Ketinggian</div><div class="value">3.156 mdpl</div></div>
+              <div class="route-meta-item"><div class="label">Start</div><div class="value">1.480 mdpl</div></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px"><i class="fa fa-ticket-alt"></i> Pesan</a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer"><i class="fa fa-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route 8 -->
+      <div class="col-md-6 col-lg-4 route-item animate-on-scroll" data-mountain="Arjuno" data-difficulty="Sangat Sulit">
+        <div class="route-card">
+          <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Via Purwosari" loading="lazy"/>
+          <div class="route-card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h3 style="font-size:1.1rem;color:var(--primary-dark);margin:0">Via Purwosari – Arjuno</h3>
+              <span class="difficulty-badge diff-extreme ms-2">Sangat Sulit</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:1rem">Jalur mistis melewati petilasan Eyang Semar dan Mahakala. Populer bagi pendaki yang menginginkan pengalaman spiritual.</p>
+            <div class="route-meta">
+              <div class="route-meta-item"><div class="label">Jarak</div><div class="value">18.2 km</div></div>
+              <div class="route-meta-item"><div class="label">Estimasi</div><div class="value">14–18 jam</div></div>
+              <div class="route-meta-item"><div class="label">Ketinggian</div><div class="value">3.339 mdpl</div></div>
+              <div class="route-meta-item"><div class="label">Start</div><div class="value">650 mdpl</div></div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="booking.html" class="btn-primary-custom flex-fill justify-content-center" style="font-size:0.85rem;padding:8px 16px"><i class="fa fa-ticket-alt"></i> Pesan</a>
+              <button style="background:var(--sky);border:none;border-radius:12px;padding:8px 14px;color:var(--primary);font-size:0.85rem;cursor:pointer"><i class="fa fa-info-circle"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end row -->
+
+    <!-- Safety Tips -->
+    <div class="mt-5 animate-on-scroll">
+      <div style="background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:20px;padding:2.5rem;color:#fff">
+        <h3 style="font-family:'Playfair Display',serif;margin-bottom:1.5rem">⚠️ Tips Keselamatan Pendakian</h3>
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-3">
+            <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:1.2rem">
+              <div style="font-size:1.8rem;margin-bottom:0.5rem">🌤</div>
+              <strong>Cek Cuaca</strong>
+              <p style="font-size:0.85rem;opacity:0.85;margin:0.3rem 0 0">Selalu periksa prakiraan cuaca sebelum berangkat.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:1.2rem">
+              <div style="font-size:1.8rem;margin-bottom:0.5rem">🎒</div>
+              <strong>Bawa Perlengkapan</strong>
+              <p style="font-size:0.85rem;opacity:0.85;margin:0.3rem 0 0">Siapkan perlengkapan lengkap termasuk P3K dan makanan.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:1.2rem">
+              <div style="font-size:1.8rem;margin-bottom:0.5rem">👥</div>
+              <strong>Jangan Sendirian</strong>
+              <p style="font-size:0.85rem;opacity:0.85;margin:0.3rem 0 0">Hindari mendaki sendirian, minimal berdua.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:1.2rem">
+              <div style="font-size:1.8rem;margin-bottom:0.5rem">🚯</div>
+              <strong>Jaga Kebersihan</strong>
+              <p style="font-size:0.85rem;opacity:0.85;margin:0.3rem 0 0">Bawa kembali sampahmu, jaga alam tetap bersih.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4"><div class="footer-brand">⛰ FazTicket</div><p class="footer-tagline">Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto.</p></div>
+      <div class="col-6 col-lg-4"><h5>Navigasi</h5><ul class="footer-links"><li><a href="index.html">Beranda</a></li><li><a href="booking.html">Booking Tiket</a></li><li><a href="sewa-alat.html">Sewa Alat</a></li><li><a href="contact.html">Kontak</a></li></ul></div>
+      <div class="col-6 col-lg-4"><h5>Kontak</h5><ul class="footer-links"><li><a href="https://wa.me/6285751787232" target="_blank">+62 857-5178-7232</a></li><li><a href="mailto:fazticket@gmail.com">fazticket@gmail.com</a></li></ul></div>
+    </div>
+    <hr class="footer-divider"/>
+    <p class="footer-bottom">© 2026 FazTicket. Dibuat untuk para pendaki Mojokerto.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+<script>
+  function filterRoutes() {
+    const mountain = document.getElementById('filterMountain').value;
+    const difficulty = document.getElementById('filterDifficulty').value;
+    const items = document.querySelectorAll('.route-item');
+    let count = 0;
+    items.forEach(item => {
+      const mMatch = !mountain || item.dataset.mountain === mountain;
+      const dMatch = !difficulty || item.dataset.difficulty === difficulty;
+      item.style.display = (mMatch && dMatch) ? '' : 'none';
+      if (mMatch && dMatch) count++;
+    });
+    document.getElementById('routeCount').textContent = count;
+  }
+</script>
+</body>
+</html>

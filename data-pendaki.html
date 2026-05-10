@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Pendaki – FazTicket</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+
+</head>
+<body>
+
+<div id="loading-screen"><div class="loader-logo">⛰ FazTicket</div><div class="loader-bar"><div class="loader-fill"></div></div></div>
+<button id="scrollTop"><i class="fa fa-chevron-up"></i></button>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><span class="brand-icon">⛰</span> FazTicket</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="info-gunung.html">Info Gunung</a></li>
+        <li class="nav-item"><a class="nav-link" href="jalur.html">Jalur Pendakian</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link active" href="data-pendaki.html">Data Pendaki</a></li>
+        <li class="nav-item"><a class="nav-link" href="sewa-alat.html">Sewa Alat</a></li>
+        <li class="nav-item"><a class="nav-link" href="statistik.html">Statistik</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+      </ul>
+      <button id="darkModeToggle">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-badge" style="margin-bottom:1rem">👥 Data Pendaki</div>
+    <h1>Daftar Pendaki Terdaftar</h1>
+    <p>Pantau, cari, filter, dan kelola data pendaki yang telah memesan tiket di FazTicket</p>
+  </div>
+</section>
+
+<section class="py-section">
+  <div class="container">
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div style="background:var(--gradient-main);border-radius:16px;padding:1.5rem;color:#fff;text-align:center">
+          <div style="font-size:2rem;font-weight:900;font-family:'Playfair Display',serif" id="totalBookings">0</div>
+          <div style="font-size:0.8rem;opacity:0.8;text-transform:uppercase;letter-spacing:1px;margin-top:0.3rem">Total Pendaki</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div style="background:linear-gradient(135deg,#065f46,#10b981);border-radius:16px;padding:1.5rem;color:#fff;text-align:center">
+          <div style="font-size:2rem;font-weight:900;font-family:'Playfair Display',serif" id="confirmedCount">0</div>
+          <div style="font-size:0.8rem;opacity:0.8;text-transform:uppercase;letter-spacing:1px;margin-top:0.3rem">Terkonfirmasi</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div style="background:linear-gradient(135deg,#92400e,#f59e0b);border-radius:16px;padding:1.5rem;color:#fff;text-align:center">
+          <div style="font-size:2rem;font-weight:900;font-family:'Playfair Display',serif" id="pendingCount">0</div>
+          <div style="font-size:0.8rem;opacity:0.8;text-transform:uppercase;letter-spacing:1px;margin-top:0.3rem">Menunggu</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div style="background:linear-gradient(135deg,#1e3a5f,#0077b6);border-radius:16px;padding:1.5rem;color:#fff;text-align:center">
+          <div style="font-size:2rem;font-weight:900;font-family:'Playfair Display',serif" id="thisMonthCount">0</div>
+          <div style="font-size:0.8rem;opacity:0.8;text-transform:uppercase;letter-spacing:1px;margin-top:0.3rem">Bulan Ini</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="search-bar animate-on-scroll">
+      <div style="flex:1;min-width:200px">
+        <input type="text" class="form-control" id="hikerSearch" placeholder="🔍 Cari nama, gunung, atau email..." oninput="filterTable()"/>
+      </div>
+      <select class="form-select" id="statusFilter" style="max-width:180px" onchange="filterTable()">
+        <option value="">Semua Status</option>
+        <option value="Confirmed">Terkonfirmasi</option>
+        <option value="Pending">Menunggu</option>
+        <option value="Cancelled">Dibatalkan</option>
+      </select>
+      <select class="form-select" id="mountainFilter" style="max-width:200px" onchange="filterTable()">
+        <option value="">Semua Gunung</option>
+        <option value="Penanggungan">Penanggungan</option>
+        <option value="Welirang">Welirang</option>
+        <option value="Arjuno">Arjuno</option>
+        <option value="Bekel">Bekel</option>
+        <option value="Pundak">Pundak</option>
+      </select>
+      <button onclick="exportCSV()" style="background:var(--primary);color:#fff;border:none;border-radius:12px;padding:10px 20px;font-size:0.9rem;cursor:pointer;white-space:nowrap">
+        <i class="fa fa-download me-1"></i> Ekspor CSV
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-custom animate-on-scroll" style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nama Pendaki</th>
+            <th>Email</th>
+            <th>WhatsApp</th>
+            <th>Gunung</th>
+            <th>Tanggal</th>
+            <th style="text-align:center">Peserta</th>
+            <th>Jalur</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="hikerTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3" style="font-size:0.88rem;color:var(--text-light)">
+      <span id="tableInfo">Menampilkan 0 dari 0 data</span>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4"><div class="footer-brand">⛰ FazTicket</div><p class="footer-tagline">Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto.</p></div>
+      <div class="col-6 col-lg-4"><h5>Navigasi</h5><ul class="footer-links"><li><a href="index.html">Beranda</a></li><li><a href="booking.html">Booking Tiket</a></li><li><a href="sewa-alat.html">Sewa Alat</a></li></ul></div>
+      <div class="col-6 col-lg-4"><h5>Kontak</h5><ul class="footer-links">
+        <li><a href="https://wa.me/6285751787232" target="_blank">+62 857-5178-7232</a></li>
+        <li><a href="mailto:fazticket@gmail.com">fazticket@gmail.com</a></li>
+      </ul></div>
+    </div>
+    <hr class="footer-divider"/>
+    <p class="footer-bottom">© 2026 FazTicket. Dibuat untuk para pendaki Mojokerto.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   DATA PENDAKI — full CRUD + localStorage delete
+   ═══════════════════════════════════════════════ */
+
+const SEED = [
+  { id:'s1',  name:'Ahmad Fauzi',    email:'ahmad@gmail.com',  phone:'081234567890', mountain:'Penanggungan', date:'2025-06-10', participants:3, route:'Via Tamiajeng', status:'Confirmed' },
+  { id:'s2',  name:'Sari Wulandari', email:'sari@gmail.com',   phone:'082345678901', mountain:'Welirang',     date:'2025-06-15', participants:2, route:'Via Tretes',    status:'Confirmed' },
+  { id:'s3',  name:'Budi Santoso',   email:'budi@gmail.com',   phone:'083456789012', mountain:'Arjuno',       date:'2025-06-20', participants:5, route:'Via Lawang',    status:'Pending'   },
+  { id:'s4',  name:'Dina Rahayu',    email:'dina@gmail.com',   phone:'084567890123', mountain:'Bekel',        date:'2025-06-08', participants:4, route:'Via Claket',    status:'Confirmed' },
+  { id:'s5',  name:'Eko Prasetyo',   email:'eko@gmail.com',    phone:'085678901234', mountain:'Penanggungan', date:'2025-06-12', participants:2, route:'Via Jolotundo', status:'Confirmed' },
+  { id:'s6',  name:'Fitriani Dewi',  email:'fitri@gmail.com',  phone:'086789012345', mountain:'Welirang',     date:'2025-06-22', participants:6, route:'Via Cangar',    status:'Pending'   },
+  { id:'s7',  name:'Guntur Alam',    email:'guntur@gmail.com', phone:'087890123456', mountain:'Arjuno',       date:'2025-05-28', participants:3, route:'Via Purwosari', status:'Confirmed' },
+  { id:'s8',  name:'Hana Putri',     email:'hana@gmail.com',   phone:'088901234567', mountain:'Pundak',       date:'2025-06-05', participants:2, route:'Via Pacet',     status:'Cancelled' },
+  { id:'s9',  name:'Ilham Setiawan', email:'ilham@gmail.com',  phone:'089012345678', mountain:'Penanggungan', date:'2025-06-18', participants:8, route:'Via Tamiajeng', status:'Confirmed' },
+  { id:'s10', name:'Julia Indah',    email:'julia@gmail.com',  phone:'081123456789', mountain:'Bekel',        date:'2025-06-25', participants:4, route:'Via Claket',    status:'Pending'   },
+  { id:'s11', name:'Kevin Arya',     email:'kevin@gmail.com',  phone:'082234567890', mountain:'Welirang',     date:'2025-07-01', participants:3, route:'Via Tretes',    status:'Confirmed' },
+  { id:'s12', name:'Lina Susanti',   email:'lina@gmail.com',   phone:'083345678901', mountain:'Arjuno',       date:'2025-07-05', participants:5, route:'Via Lawang',    status:'Pending'   },
+];
+
+function loadData() {
+  const deleted = JSON.parse(localStorage.getItem('faz_deleted') || '[]');
+  const visible = SEED.filter(r => !deleted.includes(r.id));
+  const custom  = JSON.parse(localStorage.getItem('fazticket_bookings') || '[]')
+    .filter(b => !deleted.includes(String(b.id)))
+    .map(b => ({ ...b, id: String(b.id), route: b.route || 'Via Tamiajeng' }));
+  return [...visible, ...custom];
+}
+
+/* ── Summary cards ── */
+function refreshCards() {
+  const d = loadData();
+  document.getElementById('totalBookings').textContent  = d.length;
+  document.getElementById('confirmedCount').textContent = d.filter(r => r.status==='Confirmed').length;
+  document.getElementById('pendingCount').textContent   = d.filter(r => r.status==='Pending').length;
+  const ym = new Date().toISOString().slice(0,7);
+  document.getElementById('thisMonthCount').textContent = d.filter(r => r.date && r.date.startsWith(ym)).length;
+}
+
+/* ── Format date ── */
+function fmtDate(d) {
+  if (!d) return '-';
+  const mo = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const p  = d.split('-');
+  return `${parseInt(p[2])} ${mo[parseInt(p[1])-1]} ${p[0]}`;
+}
+
+/* ── Render ── */
+function renderTable(data) {
+  const tbody = document.getElementById('hikerTableBody');
+  tbody.innerHTML = '';
+
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:3rem;color:var(--text-light)">Tidak ada data ditemukan</td></tr>';
+    document.getElementById('tableInfo').textContent = 'Menampilkan 0 data';
+    return;
+  }
+
+  data.forEach((h, i) => {
+    const sc = h.status==='Confirmed' ? 'status-confirmed' : h.status==='Pending' ? 'status-pending' : 'status-cancelled';
+    const sl = h.status==='Confirmed' ? 'Terkonfirmasi'    : h.status==='Pending' ? 'Menunggu'       : 'Dibatalkan';
+    const ph = (h.phone||'').replace(/^0+/,'');   // strip leading zeros for wa.me
+    const waMsg = encodeURIComponent(`Halo ${h.name}! Ini konfirmasi booking FazTicket — ${h.mountain}, ${fmtDate(h.date)}. Mohon cek detail pemesanan Anda. Terima kasih!`);
+
+    const tr = document.createElement('tr');
+    tr.dataset.id       = h.id;
+    tr.dataset.status   = h.status;
+    tr.dataset.mountain = h.mountain;
+    tr.innerHTML = `
+      <td style="color:var(--text-light)">${i+1}</td>
+      <td><strong style="color:var(--text-dark)">${h.name}</strong></td>
+      <td style="color:var(--text-light);font-size:.88rem">${h.email||'-'}</td>
+      <td style="color:var(--text-light);font-size:.88rem">${h.phone||'-'}</td>
+      <td><span style="color:var(--primary);font-weight:600">${h.mountain}</span></td>
+      <td>${fmtDate(h.date)}</td>
+      <td style="text-align:center"><span style="background:var(--sky);color:var(--primary-dark);border-radius:99px;padding:2px 10px;font-weight:600">${h.participants}</span></td>
+      <td style="font-size:.85rem;color:var(--text-light)">${h.route||'-'}</td>
+      <td><span class="status-badge ${sc}">${sl}</span></td>
+      <td>
+        <div style="display:flex;gap:5px;flex-wrap:nowrap">
+          <a href="https://wa.me/62${ph}?text=${waMsg}" target="_blank" title="WhatsApp"
+             style="background:#25d366;color:#fff;border-radius:8px;padding:5px 10px;font-size:.78rem;text-decoration:none;display:inline-flex;align-items:center">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a href="mailto:${h.email}" title="Email"
+             style="background:var(--sky);color:var(--primary);border-radius:8px;padding:5px 10px;font-size:.78rem;text-decoration:none;display:inline-flex;align-items:center">
+            <i class="fa fa-envelope"></i>
+          </a>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('tableInfo').textContent =
+    `Menampilkan ${data.length} dari ${loadData().length} data`;
+}
+
+/* ── Filter ── */
+function filterTable() {
+  const q  = (document.getElementById('hikerSearch')?.value||'').toLowerCase();
+  const sf = document.getElementById('statusFilter')?.value||'';
+  const mf = document.getElementById('mountainFilter')?.value||'';
+  const filtered = loadData().filter(h => {
+    const t = `${h.name} ${h.mountain} ${h.email} ${h.phone}`.toLowerCase();
+    return t.includes(q) && (!sf||h.status===sf) && (!mf||h.mountain===mf);
+  });
+  renderTable(filtered);
+}
+
+/* ── Export ── */
+function exportCSV() {
+  const all  = loadData();
+  const hdrs = ['No','Nama','Email','WhatsApp','Gunung','Tanggal','Peserta','Jalur','Status'];
+  const rows = all.map((h,i)=>[i+1,h.name,h.email,h.phone,h.mountain,h.date,h.participants,h.route,h.status]);
+  const csv  = [hdrs,...rows].map(r=>r.join(',')).join('\n');
+  const a    = Object.assign(document.createElement('a'),{
+    href: URL.createObjectURL(new Blob([csv],{type:'text/csv'})),
+    download:'data-pendaki-fazticket.csv'
+  });
+  a.click();
+}
+
+/* ── Expose ── */
+window.filterTable= filterTable;
+window.exportCSV  = exportCSV;
+
+/* ── Boot ── */
+refreshCards();
+filterTable();
+</script>
+</body>
+</html>

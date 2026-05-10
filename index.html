@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FazTicket – Tiket Pendakian Gunung Mojokerto</title>
+  <meta name="description" content="Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto, Jawa Timur."/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loader-logo">⛰ FazTicket</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<!-- Scroll to Top -->
+<button id="scrollTop" title="Kembali ke atas"><i class="fa fa-chevron-up"></i></button>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">
+      <span class="brand-icon">⛰</span> FazTicket
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="info-gunung.html">Info Gunung</a></li>
+        <li class="nav-item"><a class="nav-link" href="jalur.html">Jalur Pendakian</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link" href="data-pendaki.html">Data Pendaki</a></li>
+        <li class="nav-item"><a class="nav-link" href="sewa-alat.html">Sewa Alat</a></li>
+        <li class="nav-item"><a class="nav-link" href="statistik.html">Statistik</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+      </ul>
+      <button id="darkModeToggle" title="Toggle Dark Mode">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🏔 Platform Pendakian Terpercaya Mojokerto</div>
+    <h1 class="hero-title">Jelajahi Puncak<br><span>Mojokerto</span></h1>
+    <p class="hero-subtitle">Pesan tiket pendakian gunung-gunung indah di Mojokerto dengan mudah, aman, dan terpercaya. Petualanganmu dimulai di sini.</p>
+    <div class="hero-actions">
+      <a href="booking.html" class="btn-primary-custom">
+        <i class="fa fa-ticket-alt"></i> Pesan Sekarang
+      </a>
+      <a href="info-gunung.html" class="btn-outline-custom">
+        <i class="fa fa-mountain"></i> Lihat Gunung
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    Gulir ke bawah
+    <i class="fa fa-chevron-down"></i>
+  </div>
+</section>
+
+<!-- ===== STATS STRIP ===== -->
+<section class="stats-strip">
+  <div class="container">
+    <div class="row g-0">
+      <div class="col-6 col-md-3 stat-item animate-on-scroll">
+        <div class="stat-number" data-target="12480">0</div>
+        <div class="stat-label">Total Pendaki</div>
+      </div>
+      <div class="col-6 col-md-3 stat-item animate-on-scroll">
+        <div class="stat-number" data-target="8">0</div>
+        <div class="stat-label">Gunung Tersedia</div>
+      </div>
+      <div class="col-6 col-md-3 stat-item animate-on-scroll">
+        <div class="stat-number" data-target="24">0</div>
+        <div class="stat-label">Jalur Pendakian</div>
+      </div>
+      <div class="col-6 col-md-3 stat-item animate-on-scroll">
+        <div class="stat-number" data-target="98">0</div>
+        <div class="stat-label">% Kepuasan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED MOUNTAINS ===== -->
+<section class="py-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge animate-on-scroll">Destinasi Unggulan</div>
+      <h2 class="section-title animate-on-scroll">Gunung-Gunung di <span class="text-gradient">Mojokerto</span></h2>
+      <p class="section-subtitle animate-on-scroll">Temukan keindahan alam pegunungan Jawa Timur yang memukau</p>
+    </div>
+    <div class="row g-4">
+      <!-- Penanggungan -->
+      <div class="col-md-6 col-lg-3 animate-on-scroll">
+        <div class="mountain-card" onclick="location.href='info-gunung.html'">
+          <div class="mountain-card-img">
+            <img src="https://superlive.id/storage/superadventure/2018/10/23/94f23752c7f7.jpg" alt="Penanggungan" loading="lazy"/>
+            <span class="badge-diff">Sedang</span>
+          </div>
+          <div class="mountain-card-body">
+            <h3 class="mountain-card-title">Gunung Penanggungan</h3>
+            <div class="mountain-card-meta">
+              <span><i class="fa fa-ruler-vertical"></i> 1.653 mdpl</span>
+              <span><i class="fa fa-map-marker-alt"></i> Mojokerto</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light)">Gunung suci dengan peninggalan arkeologi Hindu yang tersebar di lerengnya.</p>
+            <a href="booking.html" class="btn-primary-custom mt-3 d-inline-flex" style="font-size:0.88rem;padding:8px 20px">
+              <i class="fa fa-ticket-alt"></i> Pesan Tiket
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Welirang -->
+      <div class="col-md-6 col-lg-3 animate-on-scroll">
+        <div class="mountain-card" onclick="location.href='info-gunung.html'">
+          <div class="mountain-card-img">
+            <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Welirang" loading="lazy"/>
+            <span class="badge-diff">Sulit</span>
+          </div>
+          <div class="mountain-card-body">
+            <h3 class="mountain-card-title">Gunung Welirang</h3>
+            <div class="mountain-card-meta">
+              <span><i class="fa fa-ruler-vertical"></i> 3.156 mdpl</span>
+              <span><i class="fa fa-map-marker-alt"></i> Mojokerto</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light)">Gunung api aktif dengan kawah belerang yang menakjubkan dan pemandangan spektakuler.</p>
+            <a href="booking.html" class="btn-primary-custom mt-3 d-inline-flex" style="font-size:0.88rem;padding:8px 20px">
+              <i class="fa fa-ticket-alt"></i> Pesan Tiket
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Arjuno -->
+      <div class="col-md-6 col-lg-3 animate-on-scroll">
+        <div class="mountain-card" onclick="location.href='info-gunung.html'">
+          <div class="mountain-card-img">
+            <img src="https://yarkey.adventuraja.id/gallery/623966ae317f5926664e6c92/Gunung%20Welirang%208.jpg" alt="Arjuno" loading="lazy"/>
+            <span class="badge-diff">Sangat Sulit</span>
+          </div>
+          <div class="mountain-card-body">
+            <h3 class="mountain-card-title">Gunung Arjuno</h3>
+            <div class="mountain-card-meta">
+              <span><i class="fa fa-ruler-vertical"></i> 3.339 mdpl</span>
+              <span><i class="fa fa-map-marker-alt"></i> Mojokerto</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light)">Puncak tertinggi di Jawa Timur bagian timur dengan sabana indah dan panorama megah.</p>
+            <a href="booking.html" class="btn-primary-custom mt-3 d-inline-flex" style="font-size:0.88rem;padding:8px 20px">
+              <i class="fa fa-ticket-alt"></i> Pesan Tiket
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Bekel -->
+      <div class="col-md-6 col-lg-3 animate-on-scroll">
+        <div class="mountain-card" onclick="location.href='info-gunung.html'">
+          <div class="mountain-card-img">
+            <img src="https://1.bp.blogspot.com/-6kHIjLW-Mco/YD23fWHy8AI/AAAAAAAACZQ/IkRTzJZjLT4JwglY6dtjjUx52Jcvzb77wCLcBGAsYHQ/s2048/P_20200803_161002.jpg" alt="Bekel" loading="lazy"/>
+            <span class="badge-diff">Mudah</span>
+          </div>
+          <div class="mountain-card-body">
+            <h3 class="mountain-card-title">Gunung Bekel</h3>
+            <div class="mountain-card-meta">
+              <span><i class="fa fa-ruler-vertical"></i> 1.281 mdpl</span>
+              <span><i class="fa fa-map-marker-alt"></i> Mojokerto</span>
+            </div>
+            <p style="font-size:0.88rem;color:var(--text-light)">Gunung pemula yang ideal dengan jalur yang ramah dan pemandangan indah Selat Madura.</p>
+            <a href="booking.html" class="btn-primary-custom mt-3 d-inline-flex" style="font-size:0.88rem;padding:8px 20px">
+              <i class="fa fa-ticket-alt"></i> Pesan Tiket
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a href="info-gunung.html" class="btn-outline-custom" style="color:var(--primary);border-color:var(--primary)">
+        Lihat Semua Gunung <i class="fa fa-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="py-section bg-light-blue">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">Mengapa FazTicket?</div>
+      <h2 class="section-title animate-on-scroll">Layanan <span class="text-gradient">Terbaik</span> untuk Pendaki</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-sm-6 col-lg-3 animate-on-scroll">
+        <div class="feature-card">
+          <div class="feature-icon">🎫</div>
+          <h4>Booking Mudah</h4>
+          <p>Pesan tiket pendakian online dalam hitungan menit, konfirmasi instan via WhatsApp & email.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 animate-on-scroll">
+        <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <h4>Info Jalur Lengkap</h4>
+          <p>Informasi jalur pendakian, tingkat kesulitan, dan estimasi waktu yang akurat.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 animate-on-scroll">
+        <div class="feature-card">
+          <div class="feature-icon">🎒</div>
+          <h4>Sewa Alat</h4>
+          <p>Sewa peralatan pendakian berkualitas dengan harga terjangkau langsung via WhatsApp.</p>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3 animate-on-scroll">
+        <div class="feature-card">
+          <div class="feature-icon">⛅</div>
+          <h4>Info Cuaca Real-time</h4>
+          <p>Pantau kondisi cuaca setiap gunung sebelum mendaki untuk keselamatan perjalananmu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUICK BOOKING CTA ===== -->
+<section style="background:var(--gradient-main);padding:5rem 0;color:#fff;text-align:center">
+  <div class="container">
+    <div class="animate-on-scroll">
+      <h2 style="font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;margin-bottom:1rem">
+        Siap Menaklukkan Puncak? 
+      </h2>
+      <p style="font-size:1.1rem;opacity:0.85;max-width:550px;margin:0 auto 2rem">
+        Bergabunglah dengan ribuan pendaki yang telah mempercayakan petualangan mereka kepada FazTicket.
+      </p>
+      <a href="booking.html" class="btn-outline-custom" style="border-color:rgba(255,255,255,0.8)">
+        <i class="fa fa-ticket-alt"></i> Pesan Tiket Sekarang
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="py-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">Testimoni</div>
+      <h2 class="section-title animate-on-scroll">Kata Mereka tentang <span class="text-gradient">FazTicket</span></h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 animate-on-scroll">
+        <div class="testimonial-card">
+          <div class="d-flex align-items-center">
+            <img class="testimonial-avatar" src="https://i.pravatar.cc/80?img=5" alt="Rina"/>
+            <div>
+              <strong style="color:var(--primary-dark)">Rina Safitri</strong>
+              <div class="testimonial-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">"Booking tiket Gunung Penanggungan sangat mudah! Konfirmasi langsung di WhatsApp, jalurnya jelas, dan petugasnya ramah. Highly recommended!"</p>
+          <small style="color:var(--text-light)">Pendaki Penanggungan — Maret 2025</small>
+        </div>
+      </div>
+      <div class="col-md-4 animate-on-scroll">
+        <div class="testimonial-card">
+          <div class="d-flex align-items-center">
+            <img class="testimonial-avatar" src="https://i.pravatar.cc/80?img=12" alt="Bagas"/>
+            <div>
+              <strong style="color:var(--primary-dark)">Bagas Kurniawan</strong>
+              <div class="testimonial-stars">★★★★★</div>
+            </div>
+          </div>
+          <p class="testimonial-text">"Info cuaca dan jalur pendakian Welirang di FazTicket sangat membantu persiapan saya. Sewa tenda juga gampang banget, cukup WA langsung!"</p>
+          <small style="color:var(--text-light)">Pendaki Welirang — April 2025</small>
+        </div>
+      </div>
+      <div class="col-md-4 animate-on-scroll">
+        <div class="testimonial-card">
+          <div class="d-flex align-items-center">
+            <img class="testimonial-avatar" src="https://i.pravatar.cc/80?img=25" alt="Sinta"/>
+            <div>
+              <strong style="color:var(--primary-dark)">Sinta Permata</strong>
+              <div class="testimonial-stars">★★★★⭐</div>
+            </div>
+          </div>
+          <p class="testimonial-text">"Pertama kali ke Arjuno, saya andalkan FazTicket. Data jalur, cuaca, dan info gunung lengkap banget. Pengalaman luar biasa!"</p>
+          <small style="color:var(--text-light)">Pendaki Arjuno — Januari 2025</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="py-section bg-light-blue">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge">FAQ</div>
+      <h2 class="section-title animate-on-scroll">Pertanyaan yang <span class="text-gradient">Sering Ditanya</span></h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question">
+            Bagaimana cara memesan tiket pendakian?
+            <i class="fa fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Klik tombol "Pesan Sekarang" atau buka halaman Booking. Isi formulir dengan nama, email, nomor WhatsApp, tanggal pendakian, pilih gunung, dan jumlah peserta. Setelah submit, konfirmasi akan dikirim via WhatsApp dan email.
+          </div>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question">
+            Apakah saya bisa membatalkan pemesanan?
+            <i class="fa fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Ya, pembatalan dapat dilakukan minimal 3 hari sebelum tanggal pendakian. Hubungi kami via WhatsApp di nomor yang tertera di halaman Kontak untuk proses pembatalan.
+          </div>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question">
+            Apakah tersedia paket sewa alat pendakian?
+            <i class="fa fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Tentu! Kami menyediakan sewa tenda, carrier/ransel, jaket gunung, sleeping bag, dan berbagai peralatan pendakian lainnya. Kunjungi halaman Sewa Alat untuk melihat daftar lengkap dan harga.
+          </div>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question">
+            Berapa batas maksimal peserta per pemesanan?
+            <i class="fa fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Satu pemesanan dapat mencakup hingga 20 peserta. Untuk grup lebih besar, silakan hubungi kami langsung via WhatsApp untuk pengaturan khusus.
+          </div>
+        </div>
+        <div class="faq-item animate-on-scroll">
+          <div class="faq-question">
+            Apakah ada batas usia untuk mendaki?
+            <i class="fa fa-chevron-down faq-icon"></i>
+          </div>
+          <div class="faq-answer">
+            Untuk gunung dengan tingkat kesulitan Mudah seperti Bekel, usia minimal 10 tahun dengan pendampingan orang dewasa. Untuk gunung Sulit dan Sangat Sulit, usia minimal 17 tahun. Disarankan kondisi fisik prima untuk semua jalur.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="footer-brand">⛰ FazTicket</div>
+        <p class="footer-tagline">Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto, Jawa Timur. Petualanganmu lebih mudah bersama kami.</p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h5>Halaman</h5>
+        <ul class="footer-links">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="info-gunung.html">Info Gunung</a></li>
+          <li><a href="jalur.html">Jalur Pendakian</a></li>
+          <li><a href="booking.html">Booking Tiket</a></li>
+          <li><a href="statistik.html">Statistik</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h5>Layanan</h5>
+        <ul class="footer-links">
+          <li><a href="sewa-alat.html">Sewa Alat</a></li>
+          <li><a href="data-pendaki.html">Data Pendaki</a></li>
+          <li><a href="contact.html">Hubungi Kami</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h5>Kontak Cepat</h5>
+        <ul class="footer-links">
+          <li><a href="tel:+6285751787232"><i class="fa fa-phone me-2"></i>+62 857-5178-7232</a></li>
+          <li><a href="mailto:fazticket@gmail.com"><i class="fa fa-envelope me-2"></i>fazticket@gmail.com</a></li>
+          <li><a href="#"><i class="fa fa-map-marker-alt me-2"></i>Jl. Mojopahit No. 45, Mojokerto</a></li>
+        </ul>
+        <a href="https://wa.me/6285751787232" target="_blank" class="btn-wa mt-3 d-inline-flex" style="width:auto">
+          <i class="fab fa-whatsapp"></i> Chat WhatsApp
+        </a>
+      </div>
+    </div>
+    <hr class="footer-divider"/>
+    <p class="footer-bottom">© 2026 FazTicket. Dibuat duntuk para pendaki Mojokerto.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

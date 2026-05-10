@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Statistik – FazTicket</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .kpi-card {
+      background: var(--card-bg); border-radius: 20px;
+      padding: 1.8rem; box-shadow: var(--shadow);
+      transition: var(--transition); height: 100%;
+      border-left: 5px solid var(--primary);
+    }
+    .kpi-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .kpi-card.green  { border-color: #10b981; }
+    .kpi-card.orange { border-color: #f59e0b; }
+    .kpi-card.purple { border-color: #8b5cf6; }
+
+    .kpi-icon {
+      width: 54px; height: 54px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1rem;
+    }
+    .kpi-icon.blue   { background: rgba(0,119,182,0.12); }
+    .kpi-icon.green  { background: rgba(16,185,129,0.12); }
+    .kpi-icon.orange { background: rgba(245,158,11,0.12); }
+    .kpi-icon.purple { background: rgba(139,92,246,0.12); }
+
+    .kpi-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 900; color: var(--text-dark); line-height: 1;
+    }
+    .kpi-label { color: var(--text-light); font-size: 0.85rem; margin-top: 0.3rem; }
+    .kpi-trend {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.8rem; font-weight: 700; padding: 3px 10px;
+      border-radius: 99px; margin-top: 0.6rem;
+    }
+    .kpi-trend.up   { background: #d1fae5; color: #065f46; }
+    .kpi-trend.down { background: #fee2e2; color: #991b1b; }
+
+    .chart-card {
+      background: var(--card-bg); border-radius: 20px;
+      padding: 1.8rem; box-shadow: var(--shadow); height: 100%;
+    }
+    .chart-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 1.4rem; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .chart-title  { font-size: 1.05rem; font-weight: 700; color: var(--primary-dark); }
+    .chart-sub    { font-size: 0.8rem; color: var(--text-light); margin-top: 2px; }
+    .pill-btn {
+      background: var(--sky); color: var(--primary); border: none;
+      border-radius: 99px; padding: 4px 14px; font-size: 0.78rem;
+      font-weight: 700; cursor: pointer; transition: var(--transition);
+    }
+    .pill-btn.active { background: var(--primary); color: #fff; }
+
+    .rank-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem 0; border-bottom: 1px solid rgba(0,119,182,0.07);
+    }
+    .rank-item:last-child { border-bottom: none; }
+    .rank-num {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--gradient-main); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 0.82rem; flex-shrink: 0;
+    }
+    .rank-bar-outer { flex: 1; }
+    .rank-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.85rem; }
+    .rank-track { height: 8px; background: rgba(0,119,182,0.1); border-radius: 99px; overflow: hidden; }
+    .rank-fill  { height: 100%; border-radius: 99px; background: var(--gradient-main); width: 0; transition: width 1.2s ease; }
+
+    .act-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 0.85rem 0; border-bottom: 1px solid rgba(0,119,182,0.07);
+    }
+    .act-item:last-child { border-bottom: none; }
+    .act-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+    .dot-confirmed { background: #10b981; }
+    .dot-pending   { background: #f59e0b; }
+    .dot-cancelled { background: #ef4444; }
+
+    .sum-box { border-radius: 12px; padding: 1rem; text-align: center; }
+    .mini-th { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); padding: 0.7rem 1rem; background: rgba(0,119,182,0.05); }
+    .mini-td { font-size: 0.88rem; padding: 0.7rem 1rem; border-bottom: 1px solid rgba(0,119,182,0.07); }
+  </style>
+</head>
+<body>
+
+<div id="loading-screen"><div class="loader-logo">⛰ FazTicket</div><div class="loader-bar"><div class="loader-fill"></div></div></div>
+<button id="scrollTop"><i class="fa fa-chevron-up"></i></button>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><span class="brand-icon">⛰</span> FazTicket</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="info-gunung.html">Info Gunung</a></li>
+        <li class="nav-item"><a class="nav-link" href="jalur.html">Jalur Pendakian</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link" href="data-pendaki.html">Data Pendaki</a></li>
+        <li class="nav-item"><a class="nav-link" href="sewa-alat.html">Sewa Alat</a></li>
+        <li class="nav-item"><a class="nav-link active" href="statistik.html">Statistik</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+      </ul>
+      <button id="darkModeToggle">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-badge" style="margin-bottom:1rem">📊 Statistik & Analitik</div>
+    <h1>Dashboard Statistik FazTicket</h1>
+    <p>Data kunjungan, tren pemesanan, dan performa gunung — semua dalam satu dasbor</p>
+  </div>
+</section>
+
+<section class="py-section">
+  <div class="container">
+
+    <!-- ── KPI CARDS ── -->
+    <div class="row g-4 mb-5">
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div class="kpi-card">
+          <div class="kpi-icon blue">🧗</div>
+          <div class="kpi-number" data-target="12480">0</div>
+          <div class="kpi-label">Total Pendaki 2025</div>
+          <span class="kpi-trend up">▲ 18.4% vs 2024</span>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div class="kpi-card green">
+          <div class="kpi-icon green">🎫</div>
+          <div class="kpi-number" data-target="9840">0</div>
+          <div class="kpi-label">Tiket Terjual 2025</div>
+          <span class="kpi-trend up">▲ 22.1% vs 2024</span>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div class="kpi-card orange">
+          <div class="kpi-icon orange">💰</div>
+          <div class="kpi-number" id="rev-kpi">0</div>
+          <div class="kpi-label">Pendapatan (Rp Juta)</div>
+          <span class="kpi-trend up">▲ 31.5% vs 2024</span>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 animate-on-scroll">
+        <div class="kpi-card purple">
+          <div class="kpi-icon purple">⭐</div>
+          <div class="kpi-number">4.8</div>
+          <div class="kpi-label">Rata-rata Rating</div>
+          <span class="kpi-trend up">▲ 0.3 vs 2024</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ROW 1: Visitors Line + Mountain Doughnut ── -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-8 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">📈 Pengunjung Bulanan 2025</div>
+              <div class="chart-sub">Jumlah pendaki yang tercatat per bulan</div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button class="pill-btn active" id="pill-m" onclick="switchView('monthly')">Bulanan</button>
+              <button class="pill-btn" id="pill-w" onclick="switchView('weekly')">Mingguan</button>
+            </div>
+          </div>
+          <canvas id="visitorChart" height="100"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-4 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🏔 Popularitas Gunung</div>
+              <div class="chart-sub">Distribusi pemesanan per destinasi</div>
+            </div>
+          </div>
+          <canvas id="mountainDonut" height="190"></canvas>
+          <div id="donutLegend" style="margin-top:1rem"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ROW 2: Booking Trend + Rankings ── -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-7 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🎫 Tren Status Pemesanan</div>
+              <div class="chart-sub">Perbandingan confirmed / pending / cancelled per bulan</div>
+            </div>
+          </div>
+          <canvas id="bookingBar" height="125"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-5 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🏆 Ranking Popularitas</div>
+              <div class="chart-sub">Berdasarkan total pemesanan</div>
+            </div>
+          </div>
+          <div id="rankList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ROW 3: Revenue + Day of Week ── -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-6 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">💰 Pendapatan Bulanan</div>
+              <div class="chart-sub">Estimasi total pendapatan tiket (Rp Juta)</div>
+            </div>
+          </div>
+          <canvas id="revenueBar" height="130"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">📅 Hari Pendakian Terfavorit</div>
+              <div class="chart-sub">Distribusi berdasarkan hari dalam seminggu</div>
+            </div>
+          </div>
+          <canvas id="dayBar" height="130"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ROW 4: Radar + Activity Feed ── -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-4 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🕸 Preferensi Kesulitan Jalur</div>
+              <div class="chart-sub">Pemula vs Berpengalaman</div>
+            </div>
+          </div>
+          <canvas id="radarChart" height="230"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-8 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">🔔 Aktivitas Pemesanan Terbaru</div>
+              <div class="chart-sub">Update dalam 24 jam terakhir</div>
+            </div>
+          </div>
+          <div id="actFeed"></div>
+          <div class="row g-2 mt-3">
+            <div class="col-4">
+              <div class="sum-box" style="background:#d1fae5">
+                <div style="font-size:1.8rem;font-weight:900;color:#065f46;font-family:'Playfair Display',serif">68</div>
+                <div style="font-size:0.78rem;color:#065f46;font-weight:600">✅ Terkonfirmasi</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="sum-box" style="background:#fef3c7">
+                <div style="font-size:1.8rem;font-weight:900;color:#92400e;font-family:'Playfair Display',serif">24</div>
+                <div style="font-size:0.78rem;color:#92400e;font-weight:600">⏳ Menunggu</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="sum-box" style="background:#fee2e2">
+                <div style="font-size:1.8rem;font-weight:900;color:#991b1b;font-family:'Playfair Display',serif">8</div>
+                <div style="font-size:0.78rem;color:#991b1b;font-weight:600">❌ Dibatalkan</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ROW 5: Age Doughnut + Summary Table ── -->
+    <div class="row g-4">
+      <div class="col-lg-4 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">👤 Demografi Usia Pendaki</div>
+              <div class="chart-sub">Kelompok usia yang paling aktif</div>
+            </div>
+          </div>
+          <canvas id="ageDonut" height="210"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-8 animate-on-scroll">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">📋 Ringkasan Per Gunung</div>
+              <div class="chart-sub">Statistik lengkap setiap destinasi pendakian</div>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse">
+              <thead>
+                <tr>
+                  <th class="mini-th">Gunung</th>
+                  <th class="mini-th">Pendaki</th>
+                  <th class="mini-th">Tiket</th>
+                  <th class="mini-th">Rating</th>
+                  <th class="mini-th">Pendapatan</th>
+                  <th class="mini-th">Tren</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="mini-td"><strong style="color:var(--primary-dark)">Penanggungan</strong></td>
+                  <td class="mini-td">4.820</td><td class="mini-td">3.950</td>
+                  <td class="mini-td"><span style="color:#f59e0b">★★★★★</span> 4.9</td>
+                  <td class="mini-td" style="color:var(--primary);font-weight:600">Rp 98,75 jt</td>
+                  <td class="mini-td"><span style="background:#d1fae5;color:#065f46;border-radius:99px;padding:2px 10px;font-size:0.76rem;font-weight:700">▲ 24%</span></td>
+                </tr>
+                <tr>
+                  <td class="mini-td"><strong style="color:var(--primary-dark)">Welirang</strong></td>
+                  <td class="mini-td">3.240</td><td class="mini-td">2.710</td>
+                  <td class="mini-td"><span style="color:#f59e0b">★★★★★</span> 4.8</td>
+                  <td class="mini-td" style="color:var(--primary);font-weight:600">Rp 94,85 jt</td>
+                  <td class="mini-td"><span style="background:#d1fae5;color:#065f46;border-radius:99px;padding:2px 10px;font-size:0.76rem;font-weight:700">▲ 19%</span></td>
+                </tr>
+                <tr>
+                  <td class="mini-td"><strong style="color:var(--primary-dark)">Arjuno</strong></td>
+                  <td class="mini-td">2.560</td><td class="mini-td">2.100</td>
+                  <td class="mini-td"><span style="color:#f59e0b">★★★★☆</span> 4.7</td>
+                  <td class="mini-td" style="color:var(--primary);font-weight:600">Rp 84,00 jt</td>
+                  <td class="mini-td"><span style="background:#d1fae5;color:#065f46;border-radius:99px;padding:2px 10px;font-size:0.76rem;font-weight:700">▲ 15%</span></td>
+                </tr>
+                <tr>
+                  <td class="mini-td"><strong style="color:var(--primary-dark)">Bekel</strong></td>
+                  <td class="mini-td">1.240</td><td class="mini-td">980</td>
+                  <td class="mini-td"><span style="color:#f59e0b">★★★★★</span> 4.8</td>
+                  <td class="mini-td" style="color:var(--primary);font-weight:600">Rp 19,60 jt</td>
+                  <td class="mini-td"><span style="background:#d1fae5;color:#065f46;border-radius:99px;padding:2px 10px;font-size:0.76rem;font-weight:700">▲ 31%</span></td>
+                </tr>
+                <tr>
+                  <td class="mini-td"><strong style="color:var(--primary-dark)">Pundak</strong></td>
+                  <td class="mini-td">620</td><td class="mini-td">500</td>
+                  <td class="mini-td"><span style="color:#f59e0b">★★★★☆</span> 4.6</td>
+                  <td class="mini-td" style="color:var(--primary);font-weight:600">Rp 12,50 jt</td>
+                  <td class="mini-td"><span style="background:#fef3c7;color:#92400e;border-radius:99px;padding:2px 10px;font-size:0.76rem;font-weight:700">▲ 8%</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4"><div class="footer-brand">⛰ FazTicket</div><p class="footer-tagline">Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto.</p></div>
+      <div class="col-6 col-lg-4"><h5>Navigasi</h5><ul class="footer-links"><li><a href="index.html">Beranda</a></li><li><a href="booking.html">Booking Tiket</a></li><li><a href="data-pendaki.html">Data Pendaki</a></li><li><a href="contact.html">Kontak</a></li></ul></div>
+      <div class="col-6 col-lg-4"><h5>Kontak</h5><ul class="footer-links"><li><a href="https://wa.me/6285751787232" target="_blank">+62 </a></li><li><a href="mailto:fazticket@gmail.com">fazticket@gmail.com</a></li></ul></div>
+    </div>
+    <hr class="footer-divider"/>
+    <p class="footer-bottom">© 2025 FazTicket. Dibuat dengan ❤️ untuk para pendaki Mojokerto.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="script.js"></script>
+<script>
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = '#5e8abf';
+
+const MO = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const PAL = ['#0077b6','#00b4d8','#48cae4','#023e8a','#90e0ef','#ade8f4'];
+
+/* ─── 1. Visitor Line Chart ─── */
+const vCtx = document.getElementById('visitorChart').getContext('2d');
+const vGrad = vCtx.createLinearGradient(0,0,0,280);
+vGrad.addColorStop(0,'rgba(0,119,182,0.35)'); vGrad.addColorStop(1,'rgba(0,119,182,0)');
+
+const vData = {
+  monthly: [620,780,910,1050,1320,1480,1650,1420,1180,980,820,270],
+  weekly:  [145,162,180,210,295,340,390,320,280,230,195,160]
+};
+const vLabels = { monthly: MO, weekly: MO.map((_,i)=>`Mg-${i+1}`) };
+
+let vChart = new Chart(vCtx, {
+  type:'line',
+  data: {
+    labels: MO,
+    datasets:[{ label:'Pendaki', data:vData.monthly,
+      borderColor:'#0077b6', backgroundColor:vGrad,
+      borderWidth:3, pointBackgroundColor:'#0077b6',
+      pointRadius:5, pointHoverRadius:8, fill:true, tension:0.4 }]
+  },
+  options:{
+    responsive:true,
+    plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.parsed.y.toLocaleString('id')} pendaki`}} },
+    scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(0,119,182,0.06)'}, ticks:{callback:v=>v.toLocaleString('id')}} }
+  }
+});
+
+function switchView(mode){
+  document.getElementById('pill-m').classList.toggle('active', mode==='monthly');
+  document.getElementById('pill-w').classList.toggle('active', mode==='weekly');
+  vChart.data.labels = vLabels[mode];
+  vChart.data.datasets[0].data = vData[mode];
+  vChart.update('active');
+}
+window.switchView = switchView;
+
+/* ─── 2. Mountain Doughnut ─── */
+const mLabels=['Penanggungan','Welirang','Arjuno','Bekel','Pundak','Lainnya'];
+const mVals=[39,26,20,10,4,1];
+new Chart(document.getElementById('mountainDonut'),{
+  type:'doughnut',
+  data:{ labels:mLabels, datasets:[{data:mVals, backgroundColor:PAL, borderWidth:2, borderColor:'#fff', hoverOffset:10}] },
+  options:{ cutout:'65%', plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}} } }
+});
+const legEl = document.getElementById('donutLegend');
+mLabels.forEach((l,i) => {
+  legEl.innerHTML += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.82rem">
+    <span style="width:11px;height:11px;border-radius:3px;background:${PAL[i]};flex-shrink:0"></span>
+    <span style="flex:1;color:var(--text-light)">${l}</span>
+    <strong style="color:var(--text-dark)">${mVals[i]}%</strong></div>`;
+});
+
+/* ─── 3. Booking Trend Stacked Bar ─── */
+new Chart(document.getElementById('bookingBar'),{
+  type:'bar',
+  data:{
+    labels:MO,
+    datasets:[
+      {label:'Terkonfirmasi', data:[420,520,630,720,890,1010,1120,970,800,670,550,185], backgroundColor:'rgba(16,185,129,0.85)', borderRadius:6, borderSkipped:false},
+      {label:'Menunggu',      data:[120,160,180,220,280,330,380,320,270,210,185,60],   backgroundColor:'rgba(245,158,11,0.85)', borderRadius:6, borderSkipped:false},
+      {label:'Dibatalkan',    data:[80,100,100,110,150,140,150,130,110,100,85,25],     backgroundColor:'rgba(239,68,68,0.75)',   borderRadius:6, borderSkipped:false}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'top',labels:{boxWidth:12,padding:14}}},
+    scales:{ x:{stacked:true,grid:{display:false}}, y:{stacked:true,grid:{color:'rgba(0,119,182,0.06)'}} }
+  }
+});
+
+/* ─── 4. Rankings ─── */
+const ranks=[
+  {name:'Penanggungan', pct:92, count:'4.820'},
+  {name:'Welirang',     pct:67, count:'3.240'},
+  {name:'Arjuno',       pct:53, count:'2.560'},
+  {name:'Bekel',        pct:26, count:'1.240'},
+  {name:'Pundak',       pct:13, count:'620'},
+];
+const rankEl = document.getElementById('rankList');
+ranks.forEach((r,i)=>{
+  rankEl.innerHTML += `<div class="rank-item">
+    <div class="rank-num">${i+1}</div>
+    <div class="rank-bar-outer">
+      <div class="rank-row">
+        <span style="font-weight:600;color:var(--text-dark)">${r.name}</span>
+        <span style="color:var(--primary);font-weight:700">${r.count}</span>
+      </div>
+      <div class="rank-track"><div class="rank-fill" data-w="${r.pct}%"></div></div>
+    </div></div>`;
+});
+setTimeout(()=>{ document.querySelectorAll('.rank-fill[data-w]').forEach(el=>el.style.width=el.dataset.w); }, 700);
+
+/* ─── 5. Revenue Bar ─── */
+new Chart(document.getElementById('revenueBar'),{
+  type:'bar',
+  data:{
+    labels:MO,
+    datasets:[{
+      label:'Pendapatan (Rp Juta)',
+      data:[12.4,16.2,19.8,24.5,32.1,38.8,44.5,37.2,29.6,22.4,17.8,5.2],
+      backgroundColor: ctx=>{
+        const g=ctx.chart.ctx.createLinearGradient(0,0,0,220);
+        g.addColorStop(0,'#0077b6'); g.addColorStop(1,'#90e0ef'); return g;
+      },
+      borderRadius:8, borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>` Rp ${c.parsed.y} juta`}}},
+    scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(0,119,182,0.06)'}, ticks:{callback:v=>`${v} jt`}} }
+  }
+});
+
+/* ─── 6. Day of Week Bar ─── */
+new Chart(document.getElementById('dayBar'),{
+  type:'bar',
+  data:{
+    labels:['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'],
+    datasets:[{
+      label:'Pendaki',
+      data:[320,280,310,350,580,1240,1080],
+      backgroundColor:['rgba(0,119,182,0.45)','rgba(0,119,182,0.45)','rgba(0,119,182,0.45)','rgba(0,119,182,0.45)','rgba(0,180,216,0.7)','rgba(2,62,138,0.9)','rgba(0,119,182,0.85)'],
+      borderRadius:8, borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false}},
+    scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(0,119,182,0.06)'}} }
+  }
+});
+
+/* ─── 7. Difficulty Radar ─── */
+new Chart(document.getElementById('radarChart'),{
+  type:'radar',
+  data:{
+    labels:['Mudah','Sedang','Sulit','Sangat Sulit','Ekstrem'],
+    datasets:[
+      {label:'Pendaki Pemula', data:[85,40,10,5,0], backgroundColor:'rgba(0,180,216,0.2)', borderColor:'#00b4d8', pointBackgroundColor:'#00b4d8', borderWidth:2},
+      {label:'Berpengalaman',  data:[30,75,90,70,40], backgroundColor:'rgba(2,62,138,0.2)', borderColor:'#023e8a', pointBackgroundColor:'#023e8a', borderWidth:2}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14}}},
+    scales:{r:{beginAtZero:true,max:100,ticks:{stepSize:25,callback:v=>v+'%'}, grid:{color:'rgba(0,119,182,0.1)'}}}
+  }
+});
+
+/* ─── 8. Activity Feed ─── */
+const acts=[
+  {type:'confirmed',name:'Budi Santoso',  mountain:'Penanggungan', time:'2 mnt lalu',   n:3},
+  {type:'confirmed',name:'Rina Safitri',  mountain:'Welirang',     time:'15 mnt lalu',  n:2},
+  {type:'pending',  name:'Agung Pratama', mountain:'Arjuno',       time:'32 mnt lalu',  n:5},
+  {type:'confirmed',name:'Sinta Dewi',    mountain:'Bekel',        time:'48 mnt lalu',  n:4},
+  {type:'cancelled',name:'Wahyu Hadi',    mountain:'Pundak',       time:'1 jam lalu',   n:2},
+  {type:'confirmed',name:'Eko Nugroho',   mountain:'Welirang',     time:'1,5 jam lalu', n:6},
+];
+const labelM={confirmed:'✅ Terkonfirmasi',pending:'⏳ Menunggu',cancelled:'❌ Dibatalkan'};
+const feedEl=document.getElementById('actFeed');
+acts.forEach(a=>{
+  feedEl.innerHTML+=`<div class="act-item">
+    <div class="act-dot dot-${a.type}"></div>
+    <div style="flex:1">
+      <div style="display:flex;justify-content:space-between">
+        <strong style="font-size:0.88rem;color:var(--text-dark)">${a.name}</strong>
+        <small style="color:var(--text-light)">${a.time}</small>
+      </div>
+      <div style="font-size:0.8rem;color:var(--text-light);margin-top:2px">
+        🏔 ${a.mountain} · 👥 ${a.n} orang · <strong>${labelM[a.type]}</strong>
+      </div>
+    </div></div>`;
+});
+
+/* ─── 9. Age Doughnut ─── */
+new Chart(document.getElementById('ageDonut'),{
+  type:'doughnut',
+  data:{
+    labels:['< 18 thn','18–25 thn','26–35 thn','36–45 thn','> 45 thn'],
+    datasets:[{
+      data:[8,42,31,14,5],
+      backgroundColor:['#caf0f8','#48cae4','#0077b6','#023e8a','#90e0ef'],
+      borderWidth:2, borderColor:'#fff', hoverOffset:8
+    }]
+  },
+  options:{
+    cutout:'60%',
+    plugins:{
+      legend:{position:'bottom',labels:{boxWidth:12,padding:12,font:{size:11}}},
+      tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed}%`}}
+    }
+  }
+});
+
+/* ─── Revenue KPI animated counter ─── */
+const revEl=document.getElementById('rev-kpi');
+let rStart=0;
+new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    const step=ts=>{
+      if(!rStart)rStart=ts;
+      const p=Math.min((ts-rStart)/1500,1);
+      revEl.textContent=Math.floor((1-Math.pow(1-p,3))*309);
+      if(p<1)requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+},{threshold:0.5}).observe(revEl);
+</script>
+</body>
+</html>

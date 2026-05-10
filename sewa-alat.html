@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sewa Alat – FazTicket</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .cart-badge {
+      position: fixed; bottom: 2rem; left: 2rem; z-index: 500;
+      background: var(--gradient-main); color: #fff;
+      border-radius: 99px; padding: 12px 24px;
+      box-shadow: var(--shadow-lg); cursor: pointer;
+      font-weight: 700; font-size: 0.95rem;
+      display: none; align-items: center; gap: 10px;
+      border: none; transition: var(--transition);
+    }
+    .cart-badge.visible { display: flex; }
+    .cart-badge:hover { transform: translateY(-3px); }
+    .cart-count {
+      background: #ff4757; color: #fff; border-radius: 50%;
+      width: 22px; height: 22px; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 900;
+    }
+    .qty-control { display: flex; align-items: center; gap: 10px; margin: 0.8rem 0; }
+    .qty-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid var(--primary); background: transparent;
+      color: var(--primary); font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .qty-btn:hover { background: var(--primary); color: #fff; }
+    .qty-val { font-size: 1.1rem; font-weight: 700; color: var(--text-dark); min-width: 24px; text-align: center; }
+    .tag-available { display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+    .tag-available.yes { background: #d1fae5; color: #065f46; }
+    .tag-available.low { background: #fef3c7; color: #92400e; }
+    .category-filter { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .cat-btn { padding: 8px 20px; border-radius: 99px; border: 2px solid var(--primary); background: transparent; color: var(--primary); font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: var(--transition); }
+    .cat-btn.active, .cat-btn:hover { background: var(--primary); color: #fff; }
+    .bundle-card { background: var(--gradient-main); color: #fff; border-radius: 20px; padding: 2rem; position: relative; overflow: hidden; }
+    .bundle-card::before { content: '🎒'; position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); font-size: 5rem; opacity: 0.12; }
+    .bundle-price { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; }
+    .rental-cart-panel {
+      position: fixed; top: 0; right: -420px; width: 400px; max-width: 95vw;
+      height: 100vh; background: var(--white); box-shadow: -8px 0 40px rgba(0,0,0,0.2);
+      z-index: 2000; transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+    }
+    .rental-cart-panel.open { right: 0; }
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1999; display: none; }
+    .cart-overlay.show { display: block; }
+    .cart-header { background: var(--gradient-main); color: #fff; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .cart-body { flex: 1; overflow-y: auto; padding: 1.5rem; }
+    .cart-footer { padding: 1.5rem; border-top: 1px solid rgba(0,119,182,0.1); }
+    .cart-item { display: flex; gap: 1rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(0,119,182,0.08); }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item-remove { margin-left: auto; background: #fee2e2; border: none; color: #991b1b; border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 0.82rem; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<div id="loading-screen"><div class="loader-logo">⛰ FazTicket</div><div class="loader-bar"><div class="loader-fill"></div></div></div>
+<button id="scrollTop"><i class="fa fa-chevron-up"></i></button>
+
+<!-- Floating cart button -->
+<button class="cart-badge" id="cartBadge" onclick="openCart()">
+  <i class="fa fa-shopping-cart"></i> Keranjang
+  <span class="cart-count" id="cartCount">0</span>
+</button>
+
+<!-- Cart overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- Slide-in cart panel -->
+<div class="rental-cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <div>
+      <h5 style="margin:0;font-family:'Playfair Display',serif">🎒 Keranjang Sewa</h5>
+      <small style="opacity:0.8">Daftar alat yang ingin disewa</small>
+    </div>
+    <button onclick="closeCart()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:1.1rem">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div id="cartEmpty" style="text-align:center;padding:3rem 1rem;color:var(--text-light)">
+      <div style="font-size:3rem;margin-bottom:1rem">🛒</div>
+      <p>Keranjangmu masih kosong.<br>Tambahkan alat pendakian!</p>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-footer">
+    <div class="d-flex justify-content-between mb-2">
+      <span style="color:var(--text-light);font-size:0.9rem">Total Estimasi</span>
+      <strong style="color:var(--primary);font-size:1.2rem" id="cartTotal">Rp 0</strong>
+    </div>
+    <small style="color:var(--text-light);display:block;margin-bottom:1rem;font-size:0.78rem">*Harga per hari. Konfirmasi detail via WhatsApp.</small>
+    <button onclick="checkoutCart()" class="btn-wa w-100 justify-content-center" style="border-radius:12px;padding:14px;font-size:1rem">
+      <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
+    </button>
+    <button onclick="clearCart()" style="background:none;border:none;color:var(--text-light);font-size:0.85rem;width:100%;margin-top:0.8rem;cursor:pointer">
+      Kosongkan Keranjang
+    </button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><span class="brand-icon">⛰</span> FazTicket</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="info-gunung.html">Info Gunung</a></li>
+        <li class="nav-item"><a class="nav-link" href="jalur.html">Jalur Pendakian</a></li>
+        <li class="nav-item"><a class="nav-link" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link" href="data-pendaki.html">Data Pendaki</a></li>
+        <li class="nav-item"><a class="nav-link active" href="sewa-alat.html">Sewa Alat</a></li>
+        <li class="nav-item"><a class="nav-link" href="statistik.html">Statistik</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+      </ul>
+      <button id="darkModeToggle">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-badge" style="margin-bottom:1rem"> Sewa Alat</div>
+    <h1>Sewa Peralatan Pendakian</h1>
+    <p>Lengkapi petualanganmu dengan peralatan berkualitas, harga terjangkau</p>
+  </div>
+</section>
+
+<!-- BUNDLE PROMO -->
+<section style="background:var(--sky-light);padding:3rem 0">
+  <div class="container">
+    <div class="text-center mb-4 animate-on-scroll">
+      <div class="section-badge">🔥 Penawaran Spesial</div>
+      <h2 class="section-title mt-2">Paket <span class="text-gradient">Hemat</span> Lengkap</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 animate-on-scroll">
+        <div class="bundle-card">
+          <div class="section-badge" style="margin-bottom:0.8rem;background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4)">STARTER PACK</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:0.3rem">Paket Starter Pendaki</h3>
+          <p style="opacity:0.85;font-size:0.9rem;margin-bottom:1rem">Tenda 2P + Sleeping Bag + Carrier 60L</p>
+          <div class="bundle-price">Rp 150.000</div>
+          <div style="text-decoration:line-through;opacity:0.6;font-size:1rem;margin-bottom:0.3rem">Rp 195.000</div>
+          <small style="opacity:0.7;background:rgba(255,255,255,0.2);border-radius:99px;padding:3px 10px">/malam — Hemat 23%</small>
+          <br>
+          <button onclick="orderBundle('Paket Starter Pendaki','Tenda 2P + Sleeping Bag + Carrier 60L','Rp 150.000')" class="btn-outline-custom mt-3" style="border-color:rgba(255,255,255,0.7);font-size:0.9rem;padding:10px 24px">
+            <i class="fab fa-whatsapp"></i> Pesan Paket Ini
+          </button>
+        </div>
+      </div>
+      <div class="col-md-6 animate-on-scroll">
+        <div class="bundle-card" style="background:linear-gradient(135deg,#065f46,#10b981)">
+          <div class="section-badge" style="margin-bottom:0.8rem;background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4)">PRO PACK</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:0.3rem">Paket Pro Pendaki</h3>
+          <p style="opacity:0.85;font-size:0.9rem;margin-bottom:1rem">Tenda 3P + Sleeping Bag ×2 + Carrier 60L + Jaket + Kompor</p>
+          <div class="bundle-price">Rp 280.000</div>
+          <div style="text-decoration:line-through;opacity:0.6;font-size:1rem;margin-bottom:0.3rem">Rp 370.000</div>
+          <small style="opacity:0.7;background:rgba(255,255,255,0.2);border-radius:99px;padding:3px 10px">/malam — Hemat 24%</small>
+          <br>
+          <button onclick="orderBundle('Paket Pro Pendaki','Tenda 3P + Sleeping Bag ×2 + Carrier 60L + Jaket + Kompor','Rp 280.000')" class="btn-outline-custom mt-3" style="border-color:rgba(255,255,255,0.7);font-size:0.9rem;padding:10px 24px">
+            <i class="fab fa-whatsapp"></i> Pesan Paket Ini
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CATALOG -->
+<section class="py-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-badge animate-on-scroll">Katalog Lengkap</div>
+      <h2 class="section-title animate-on-scroll">Pilih <span class="text-gradient">Peralatan</span> Pendakianmu</h2>
+      <p class="section-subtitle animate-on-scroll">Tambahkan ke keranjang & pesan sekaligus via WhatsApp</p>
+    </div>
+
+    <!-- Filter -->
+    <div class="category-filter animate-on-scroll">
+      <button class="cat-btn active" onclick="filterCat('all',this)">Semua</button>
+      <button class="cat-btn" onclick="filterCat('kemah',this)"> Berkemah</button>
+      <button class="cat-btn" onclick="filterCat('pakaian',this)"> Pakaian</button>
+      <button class="cat-btn" onclick="filterCat('penerangan',this)">Penerangan</button>
+      <button class="cat-btn" onclick="filterCat('masak',this)"> Masak</button>
+      <button class="cat-btn" onclick="filterCat('keselamatan',this)"> Keselamatan</button>
+    </div>
+
+    <div class="row g-4" id="equipGrid">
+
+      <!-- Tenda 2P -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="kemah">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://down-id.img.susercontent.com/file/id-11134207-7rask-m1agun7zho0f1c" alt="Tenda 2P" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Berkemah</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Tenda Dome 2 Person</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Tenda ringan waterproof kapasitas 2 orang. Cocok untuk pendakian gunung sampai 3.500 mdpl.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Berat: 1.8 kg</li><li>Material: Nylon 40D ripstop</li><li>Waterproof: 3000mm</li>
+            </ul>
+            <div class="equip-price">Rp 75.000 <span>/malam</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('tent2',-1)">−</button>
+              <span class="qty-val" id="qty-tent2">1</span>
+              <button class="qty-btn" onclick="changeQty('tent2',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('tent2','Tenda Dome 2P',75000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Tenda Dome 2 Person','Rp 75.000/malam')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tenda 3P -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="kemah">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://down-id.img.susercontent.com/file/766ed20ecdc09953d9ac3503a8a81611" alt="Tenda 3P" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Berkemah</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Tenda Dome 3 Person</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Tenda kapasitas 3 orang dengan vestibule ekstra luas. Ideal untuk grup kecil.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Berat: 2.6 kg</li><li>Material: Polyester 210T</li><li>Waterproof: 5000mm</li>
+            </ul>
+            <div class="equip-price">Rp 95.000 <span>/malam</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('tent3',-1)">−</button>
+              <span class="qty-val" id="qty-tent3">1</span>
+              <button class="qty-btn" onclick="changeQty('tent3',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('tent3','Tenda Dome 3P',95000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Tenda Dome 3 Person','Rp 95.000/malam')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carrier -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="kemah">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://id-test-11.slatic.net/p/d7e5d6a4691c42cb05ee72b4e3fedd2b.jpg" alt="Carrier" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Berkemah</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Carrier / Ransel 60L</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Carrier 60L dengan frame internal dan rain cover. Ergonomis untuk pendakian panjang.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Kapasitas: 60 Liter</li><li>Frame: Internal aluminium</li><li>Inkl. Rain Cover</li>
+            </ul>
+            <div class="equip-price">Rp 45.000 <span>/hari</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('carrier',-1)">−</button>
+              <span class="qty-val" id="qty-carrier">1</span>
+              <button class="qty-btn" onclick="changeQty('carrier',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('carrier','Carrier 60L',45000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Carrier / Ransel 60L','Rp 45.000/hari')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sleeping Bag -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="kemah">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://m.media-amazon.com/images/I/619cWvIDIhL._AC_SL1500_.jpg" alt="Sleeping Bag" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Berkemah</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Sleeping Bag −5°C</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Sleeping bag mummy style ideal untuk puncak gunung Jawa Timur hingga −5°C.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Comfort: 5°C | Limit: −5°C</li><li>Filling: Hollow fibre 300gr</li><li>Berat: 950 gram</li>
+            </ul>
+            <div class="equip-price">Rp 35.000 <span>/malam</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('sleepbag',-1)">−</button>
+              <span class="qty-val" id="qty-sleepbag">1</span>
+              <button class="qty-btn" onclick="changeQty('sleepbag',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('sleepbag','Sleeping Bag -5°C',35000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Sleeping Bag -5°C','Rp 35.000/malam')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jaket -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="pakaian">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://images-dynamic-arcteryx.imgix.net/S23/1350x1710/Beta-AR-Jacket-Stormhood-W-Black.jpg" alt="Jaket" loading="lazy"/>
+            <span class="tag-available low" style="position:absolute;top:12px;left:12px">⚠️ Stok Terbatas</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Pakaian</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Jaket Gunung Gorpcore</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Jaket 3-layer tahan angin dan air, sangat nyaman untuk pendakian di ketinggian.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Ukuran: S, M, L, XL</li><li>Windproof + Waterproof</li><li>3-layer membrane</li>
+            </ul>
+            <div class="equip-price">Rp 40.000 <span>/hari</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('jacket',-1)">−</button>
+              <span class="qty-val" id="qty-jacket">1</span>
+              <button class="qty-btn" onclick="changeQty('jacket',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('jacket','Jaket Gunung',40000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Jaket Gunung Windproof','Rp 40.000/hari')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Poncho -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="pakaian">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://myweekendplan.asia/wp-content/uploads/2022/04/Adult-Hiking-Rain-Poncho.png" alt="Poncho" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Pakaian</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Poncho / Jas Hujan</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Poncho multifungsi, bisa menutup carrier sekaligus. Ringan dan mudah dilipat.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>All size</li><li>Cover carrier: Ya</li><li>Berat: 220 gram</li>
+            </ul>
+            <div class="equip-price">Rp 15.000 <span>/hari</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('poncho',-1)">−</button>
+              <span class="qty-val" id="qty-poncho">1</span>
+              <button class="qty-btn" onclick="changeQty('poncho',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('poncho','Poncho/Jas Hujan',15000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Poncho / Jas Hujan','Rp 15.000/hari')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Headlamp -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="penerangan">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://cdn11.bigcommerce.com/s-4ytrikgs1c/images/stencil/900w/products/16346/31440/E007001__00701.1745600612.jpg?compression=lossy" alt="headlamp" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700"> Headlamp</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Headlamp Set</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">headlamp Wajib untuk pendakian dini hari atau malam.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Headlamp dan senter</li><li>Include. baterai cadangan</li>
+            </ul>
+            <div class="equip-price">Rp 25.000 <span>/hari</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('compass',-1)">−</button>
+              <span class="qty-val" id="qty-compass">1</span>
+              <button class="qty-btn" onclick="changeQty('compass',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('compass','Kompas + Headlamp',25000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Kompas + Headlamp Set','Rp 25.000/hari')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kompor -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="masak">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://cf.shopee.co.id/file/b4a854fc7da1230ce8a4dcda68c0fc1a_tn" alt="Kompor" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Masak</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Kompor Gas Portable</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Kompor canister ultralight + panci titanium. Mendidihkan 1L air dalam 3 menit.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Berat: 85 gram</li><li>Output: 2.900 kcal/hr</li><li>Canister tidak termasuk</li>
+            </ul>
+            <div class="equip-price">Rp 30.000 <span>/hari</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('stove',-1)">−</button>
+              <span class="qty-val" id="qty-stove">1</span>
+              <button class="qty-btn" onclick="changeQty('stove',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('stove','Kompor Gas Portable',30000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Kompor Gas Portable','Rp 30.000/hari')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trekking Pole -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="keselamatan">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://blackdiamondequipment.com/cdn/shop/files/112552_6044_TRAIL_BACK_TREKKING_POLES_Burnt_Sienna_01.jpg?v=1742402363" alt="Trekking Pole" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Keselamatan</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Trekking Pole (Sepasang)</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Tongkat pendakian aluminium adjustable, mengurangi beban lutut di medan terjal.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>Material: Aluminium 7075</li><li>Panjang: 65–135 cm</li><li>Berat: 420 gram/sepasang</li>
+            </ul>
+            <div class="equip-price">Rp 20.000 <span>/hari</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('pole',-1)">−</button>
+              <span class="qty-val" id="qty-pole">1</span>
+              <button class="qty-btn" onclick="changeQty('pole',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('pole','Trekking Pole',20000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Trekking Pole (Sepasang)','Rp 20.000/hari')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- P3K -->
+      <div class="col-sm-6 col-lg-4 equip-item animate-on-scroll" data-cat="keselamatan">
+        <div class="equip-card">
+          <div style="position:relative">
+            <img src="https://down-id.img.susercontent.com/file/id-11134201-7ra0q-mcbke04zi69u4a" alt="P3K" loading="lazy"/>
+            <span class="tag-available yes" style="position:absolute;top:12px;left:12px">✅ Tersedia</span>
+            <span style="position:absolute;top:12px;right:12px;background:rgba(2,62,138,0.88);color:#fff;border-radius:99px;padding:3px 10px;font-size:0.72rem;font-weight:700">Keselamatan</span>
+          </div>
+          <div class="equip-card-body">
+            <h4 style="color:var(--primary-dark);font-size:1.05rem;margin-bottom:0.3rem">Kit P3K Lengkap</h4>
+            <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.8rem">Kotak P3K berisi 30+ item medis dasar, emergency blanket, dan panduan pertolongan pertama.</p>
+            <ul style="font-size:0.82rem;color:var(--text-light);padding-left:1.2rem;margin-bottom:1rem;line-height:1.9">
+              <li>30+ item medis</li><li>Inkl. emergency blanket</li><li>Manual pertolongan pertama</li>
+            </ul>
+            <div class="equip-price">Rp 20.000 <span>/hari</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty('p3k',-1)">−</button>
+              <span class="qty-val" id="qty-p3k">1</span>
+              <button class="qty-btn" onclick="changeQty('p3k',1)">+</button>
+            </div>
+            <button class="btn-primary-custom w-100 justify-content-center mb-2" style="font-size:0.88rem;padding:10px" onclick="addToCart('p3k','Kit P3K Lengkap',20000,)">
+              <i class="fa fa-cart-plus"></i> Tambah ke Keranjang
+            </button>
+            <button class="btn-wa" style="font-size:0.88rem;padding:10px" onclick="rentItem('Kit P3K Lengkap','Rp 20.000/hari')">
+              <i class="fab fa-whatsapp"></i> Pesan Langsung WA
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Terms -->
+    <div class="mt-5 animate-on-scroll">
+      <h3 class="section-title mb-4">Syarat & Ketentuan Sewa</h3>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div style="background:var(--card-bg);border-radius:16px;padding:2rem;box-shadow:var(--shadow)">
+            <h5 style="color:var(--primary-dark);margin-bottom:1rem">Prosedur Pemesanan</h5>
+            <ol style="color:var(--text-light);font-size:0.9rem;padding-left:1.2rem;line-height:2.2">
+              <li>Pilih alat, tambahkan ke keranjang</li>
+              <li>Klik "Pesan via WhatsApp"</li>
+              <li>Konfirmasi tanggal sewa & pengambilan</li>
+              <li>Bayar DP 50% via transfer</li>
+              <li>Ambil alat di basecamp FazTicket</li>
+              <li>Kembalikan alat setelah selesai</li>
+            </ol>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div style="background:var(--card-bg);border-radius:16px;padding:2rem;box-shadow:var(--shadow)">
+            <h5 style="color:var(--primary-dark);margin-bottom:1rem">⚠️ Ketentuan Penting</h5>
+            <ul style="color:var(--text-light);font-size:0.9rem;padding-left:1.2rem;line-height:2.2">
+              <li>Pengembalian sesuai waktu yang disepakati</li>
+              <li>Keterlambatan kena biaya tambahan Rp 10.000/jam</li>
+              <li>Kerusakan ditanggung penyewa</li>
+              <li>Kehilangan ganti harga barang</li>
+              <li>Minimal sewa 1 hari, maksimal 7 hari</li>
+              <li>Deposit dikembalikan setelah alat diterima</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4"><div class="footer-brand">⛰ FazTicket</div><p class="footer-tagline">Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto.</p></div>
+      <div class="col-6 col-lg-4"><h5>Penerangan</h5><ul class="footer-links"><li><a href="index.html">Beranda</a></li><li><a href="booking.html">Booking Tiket</a></li><li><a href="jalur.html">Jalur Pendakian</a></li><li><a href="contact.html">Kontak</a></li></ul></div>
+      <div class="col-6 col-lg-4"><h5>Kontak</h5><ul class="footer-links"><li><a href="https://wa.me/6285751787232" target="_blank">+62 857-5178-7232</a></li><li><a href="mailto:fazticket@gmail.com">fazticket@gmail.com</a></li></ul></div>
+    </div>
+    <hr class="footer-divider"/>
+    <p class="footer-bottom">© 2026 FazTicket. Dibuat untuk para pendaki Mojokerto.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+<script>
+  let cart = {};
+  const qtyState = {};
+
+  function changeQty(id, delta) {
+    qtyState[id] = Math.max(1, (qtyState[id] || 1) + delta);
+    const el = document.getElementById('qty-' + id);
+    if (el) el.textContent = qtyState[id];
+  }
+
+  function addToCart(id, name, price, icon) {
+    const qty = qtyState[id] || 1;
+    cart[id] = cart[id] ? { ...cart[id], qty: cart[id].qty + qty } : { name, price, icon, qty };
+    renderCart(); openCart(); showToast(`${icon} ${name} ditambahkan!`);
+  }
+
+  function removeFromCart(id) { delete cart[id]; renderCart(); }
+  function clearCart() { cart = {}; renderCart(); }
+
+  function renderCart() {
+    const items = Object.entries(cart);
+    const body = document.getElementById('cartItems');
+    const empty = document.getElementById('cartEmpty');
+    const badge = document.getElementById('cartBadge');
+    const countEl = document.getElementById('cartCount');
+    const totalEl = document.getElementById('cartTotal');
+    let total = 0, count = 0;
+
+    if (!items.length) {
+      empty.style.display = 'block'; body.innerHTML = '';
+      badge.classList.remove('visible');
+      totalEl.textContent = 'Rp 0'; return;
+    }
+    empty.style.display = 'none'; badge.classList.add('visible'); body.innerHTML = '';
+
+    items.forEach(([id, item]) => {
+      total += item.price * item.qty; count += item.qty;
+      body.innerHTML += `<div class="cart-item">
+        <div style="font-size:2rem">${item.icon}</div>
+        <div style="flex:1">
+          <div style="font-weight:600;color:var(--text-dark);font-size:0.9rem">${item.name}</div>
+          <div style="color:var(--primary);font-weight:700;font-size:0.88rem">Rp ${item.price.toLocaleString('id')} × ${item.qty} = Rp ${(item.price*item.qty).toLocaleString('id')}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart('${id}')">✕</button>
+      </div>`;
+    });
+    countEl.textContent = count;
+    totalEl.textContent = `Rp ${total.toLocaleString('id')}`;
+  }
+
+  function openCart() {
+    document.getElementById('cartPanel').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCart() {
+    document.getElementById('cartPanel').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  function checkoutCart() {
+    const items = Object.values(cart);
+    if (!items.length) return;
+    const list = items.map(i => `• ${i.icon} ${i.name} × ${i.qty} = Rp ${(i.price*i.qty).toLocaleString('id')}`).join('\n');
+    const total = items.reduce((s,i) => s + i.price*i.qty, 0);
+    const msg = encodeURIComponent(`🎒 *Sewa Alat FazTicket*\n\n${list}\n\n💰 *Total: Rp ${total.toLocaleString('id')}/hari*\n\nMohon konfirmasi ketersediaan & jadwal pengambilan. Terima kasih!`);
+    window.open(`https://wa.me/6285751787232?text=${msg}`, '_blank');
+  }
+  function orderBundle(name, items, price) {
+    const msg = encodeURIComponent(`🎒 *${name} – FazTicket*\n\nItem:\n${items.split('+').map(i=>`• ${i.trim()}`).join('\n')}\n\nHarga: ${price}/malam\n\nMohon konfirmasi ketersediaan. Terima kasih!`);
+    window.open(`https://wa.me/6285751787232?text=${msg}`, '_blank');
+  }
+  function filterCat(cat, btn) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.equip-item').forEach(el => {
+      el.style.display = (cat === 'all' || el.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = `position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);background:#023e8a;color:#fff;padding:10px 22px;border-radius:99px;font-size:0.9rem;z-index:5000;box-shadow:0 4px 20px rgba(0,0,0,0.3);animation:fadeIn .3s ease`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2400);
+  }
+  window.addToCart = addToCart; window.removeFromCart = removeFromCart;
+  window.clearCart = clearCart; window.openCart = openCart;
+  window.closeCart = closeCart; window.checkoutCart = checkoutCart;
+  window.orderBundle = orderBundle; window.filterCat = filterCat;
+  window.changeQty = changeQty;
+</script>
+</body>
+</html>

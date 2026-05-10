@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking Tiket – FazTicket</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="loading-screen">
+  <div class="loader-logo">⛰ FazTicket</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+</div>
+
+<button id="scrollTop" title="Kembali ke atas"><i class="fa fa-chevron-up"></i></button>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="index.html"><span class="brand-icon">⛰</span> FazTicket</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="nav-item"><a class="nav-link" href="info-gunung.html">Info Gunung</a></li>
+        <li class="nav-item"><a class="nav-link" href="jalur.html">Jalur Pendakian</a></li>
+        <li class="nav-item"><a class="nav-link active" href="booking.html">Booking</a></li>
+        <li class="nav-item"><a class="nav-link" href="data-pendaki.html">Data Pendaki</a></li>
+        <li class="nav-item"><a class="nav-link" href="sewa-alat.html">Sewa Alat</a></li>
+        <li class="nav-item"><a class="nav-link" href="statistik.html">Statistik</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontak</a></li>
+      </ul>
+      <button id="darkModeToggle">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="section-badge" style="margin-bottom:1rem">🎫 Online Booking</div>
+    <h1>Pesan Tiket Pendakian</h1>
+    <p>Isi formulir di bawah untuk memesan tiket pendakian gunung pilihanmu</p>
+  </div>
+</section>
+
+<!-- BOOKING SECTION -->
+<section class="booking-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="booking-card animate-on-scroll">
+          <div class="booking-header">
+            <div style="font-size:3rem;margin-bottom:0.5rem">🏔</div>
+            <h2>Formulir Pemesanan Tiket</h2>
+            <p style="opacity:0.85;margin:0">Konfirmasi akan dikirim via WhatsApp & Email</p>
+          </div>
+          <div class="booking-body">
+            <form id="bookingForm" novalidate>
+
+              <!-- Personal Info -->
+              <div class="mb-4">
+                <h5 style="color:var(--primary);font-size:1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:1.2rem">
+                  <i class="fa fa-user me-2"></i>Informasi Pribadi
+                </h5>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="b-name">Nama Lengkap *</label>
+                    <input type="text" class="form-control" id="b-name" placeholder="Masukkan nama lengkap" required/>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="b-email">Email *</label>
+                    <input type="email" class="form-control" id="b-email" placeholder="contoh@email.com" required/>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label" for="b-phone">Nomor WhatsApp *</label>
+                    <div class="input-group">
+                      <span class="input-group-text" style="background:var(--sky);border:2px solid #d0e8f5;border-right:none;border-radius:12px 0 0 12px">+62</span>
+                      <input type="tel" class="form-control" id="b-phone" placeholder="857-5178-7232" required
+                        style="border-left:none;border-radius:0 12px 12px 0"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Trip Info -->
+              <div class="mb-4">
+                <h5 style="color:var(--primary);font-size:1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:1.2rem">
+                  <i class="fa fa-mountain me-2"></i>Informasi Pendakian
+                </h5>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label" for="b-mountain">Pilih Gunung *</label>
+                    <select class="form-select" id="b-mountain" required>
+                      <option value="">-- Pilih Gunung --</option>
+                      <option value="Penanggungan">Gunung Penanggungan (1.653 mdpl)</option>
+                      <option value="Welirang">Gunung Welirang (3.156 mdpl)</option>
+                      <option value="Arjuno">Gunung Arjuno (3.339 mdpl)</option>
+                      <option value="Bekel">Gunung Bekel (1.281 mdpl)</option>
+                      <option value="Bulu Gadung">Gunung Bulu Gadung (1.200 mdpl)</option>
+                      <option value="Klenteng">Gunung Klenteng (880 mdpl)</option>
+                      <option value="Lawu Cilik">Gunung Lawu Cilik (950 mdpl)</option>
+                      <option value="Pundak">Gunung Pundak (1.585 mdpl)</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="b-date">Tanggal Pendakian *</label>
+                    <input type="date" class="form-control" id="b-date" required/>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="b-participants">Jumlah Peserta *</label>
+                    <input type="number" class="form-control" id="b-participants" min="1" max="20" value="1" required/>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label" for="b-route">Jalur Pendakian</label>
+                    <select class="form-select" id="b-route">
+                      <option value="">-- Pilih Jalur --</option>
+                      <option value="Tamiajeng">Via Tamiajeng</option>
+                      <option value="Jolotundo">Via Jolotundo</option>
+                      <option value="Kebontaman">Via Kebontaman</option>
+                      <option value="Tretes">Via Tretes</option>
+                      <option value="Lawang">Via Lawang</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label" for="b-notes">Catatan Tambahan</label>
+                    <textarea class="form-control" id="b-notes" rows="3" placeholder="Kebutuhan khusus, pertanyaan, dll..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Price Estimate -->
+              <div id="priceEstimate" class="mb-4" style="display:none">
+                <div style="background:linear-gradient(135deg,#e8f4fd,#caf0f8);border-radius:16px;padding:1.5rem">
+                  <h6 style="color:var(--primary-dark);margin-bottom:1rem"><i class="fa fa-receipt me-2"></i>Estimasi Biaya</h6>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span style="color:var(--text-light)">Tiket Masuk Gunung</span>
+                    <strong id="est-tiket" style="color:var(--primary-dark)">-</strong>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span style="color:var(--text-light)">Jumlah Peserta</span>
+                    <strong id="est-peserta" style="color:var(--primary-dark)">-</strong>
+                  </div>
+                  <hr style="border-color:rgba(0,119,182,0.2)"/>
+                  <div class="d-flex justify-content-between">
+                    <strong style="color:var(--primary-dark)">Total Estimasi</strong>
+                    <strong id="est-total" style="color:var(--primary);font-size:1.1rem">-</strong>
+                  </div>
+                  <small style="color:var(--text-light);display:block;margin-top:0.5rem">*Harga bisa berubah, konfirmasi final via WhatsApp</small>
+                </div>
+              </div>
+
+              <!-- Agreement -->
+              <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="agreeTerms" required/>
+                <label class="form-check-label" for="agreeTerms" style="font-size:0.9rem;color:var(--text-light)">
+                  Saya menyetujui <a href="#" style="color:var(--primary)">Syarat & Ketentuan</a> pendakian dan bersedia mengikuti aturan yang berlaku.
+                </label>
+              </div>
+
+              <!-- Submit -->
+              <button type="submit" class="btn-primary-custom w-100 justify-content-center py-3" style="font-size:1.05rem;border-radius:14px">
+                <i class="fa fa-paper-plane"></i> Kirim Pemesanan
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="row g-3 mt-2">
+          <div class="col-md-4 animate-on-scroll">
+            <div class="feature-card">
+              <div class="feature-icon">✅</div>
+              <h4>Konfirmasi Instan</h4>
+              <p>Terima konfirmasi booking langsung via WhatsApp.</p>
+            </div>
+          </div>
+          <div class="col-md-4 animate-on-scroll">
+            <div class="feature-card">
+              <div class="feature-icon">🔒</div>
+              <h4>Data Aman</h4>
+              <p>Informasi pribadimu terlindungi dan tidak disalahgunakan.</p>
+            </div>
+          </div>
+          <div class="col-md-4 animate-on-scroll">
+            <div class="feature-card">
+              <div class="feature-icon">🔄</div>
+              <h4>Mudah Reschedule</h4>
+              <p>Ubah jadwal pendakian dengan mudah minimal 3 hari sebelumnya.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING CONFIRMATION POPUP -->
+<div class="popup-overlay" id="bookingPopup">
+  <div class="popup-box">
+    <div class="popup-icon">🎉</div>
+    <h3>Pemesanan Berhasil!</h3>
+    <p>
+      Terima kasih, <strong id="popup-name">-</strong>!<br>
+      Tiket <strong id="popup-mountain">-</strong> tanggal <strong id="popup-date">-</strong> telah dipesan.<br>
+      Lanjutkan konfirmasi via:
+    </p>
+    <div class="popup-actions">
+      <a id="popup-wa-btn" href="#" target="_blank" class="btn-wa" style="border-radius:12px;padding:12px 24px">
+        <i class="fab fa-whatsapp"></i> Konfirmasi WhatsApp
+      </a>
+      <a id="popup-email-btn" href="#" class="btn-primary-custom" style="border-radius:12px">
+        <i class="fa fa-envelope"></i> Kirim Email
+      </a>
+    </div>
+    <button onclick="closePopup()" style="background:none;border:none;color:var(--text-light);margin-top:1.5rem;cursor:pointer;font-size:0.9rem">
+      Tutup ✕
+    </button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="footer-brand">⛰ FazTicket</div>
+        <p class="footer-tagline">Platform pemesanan tiket pendakian gunung terpercaya di Mojokerto.</p>
+      </div>
+      <div class="col-6 col-lg-4">
+        <h5>Navigasi</h5>
+        <ul class="footer-links">
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="jalur.html">Jalur Pendakian</a></li>
+          <li><a href="sewa-alat.html">Sewa Alat</a></li>
+          <li><a href="contact.html">Kontak</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-4">
+        <h5>Bantuan</h5>
+        <ul class="footer-links">
+          <li><a href="https://wa.me/6285751787232" target="_blank">Chat WhatsApp</a></li>
+          <li><a href="fazticket@gmail.com">Email Kami</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="footer-divider"/>
+    <p class="footer-bottom">© 2026 FazTicket. Dibuat untuk para pendaki Mojokerto.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+<script>
+  // Set minimum date to today
+  const dateInput = document.getElementById('b-date');
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+  }
+
+  // Price estimation
+  const prices = {
+    'Penanggungan': 25000,
+    'Welirang': 35000,
+    'Arjuno': 40000,
+    'Bekel': 20000,
+    'Bulu Gadung': 20000,
+    'Klenteng': 15000,
+    'Lawu Cilik': 15000,
+    'Pundak': 25000
+  };
+
+  function updateEstimate() {
+    const mountain = document.getElementById('b-mountain').value;
+    const participants = parseInt(document.getElementById('b-participants').value) || 1;
+    const section = document.getElementById('priceEstimate');
+
+    if (mountain && prices[mountain]) {
+      const perPerson = prices[mountain];
+      const total = perPerson * participants;
+      document.getElementById('est-tiket').textContent = `Rp ${perPerson.toLocaleString('id')}/orang`;
+      document.getElementById('est-peserta').textContent = `${participants} orang`;
+      document.getElementById('est-total').textContent = `Rp ${total.toLocaleString('id')}`;
+      section.style.display = 'block';
+    } else {
+      section.style.display = 'none';
+    }
+  }
+
+  document.getElementById('b-mountain').addEventListener('change', updateEstimate);
+  document.getElementById('b-participants').addEventListener('input', updateEstimate);
+</script>
+</body>
+</html>
